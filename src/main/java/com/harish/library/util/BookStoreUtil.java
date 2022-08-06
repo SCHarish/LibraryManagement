@@ -1,6 +1,6 @@
 package com.harish.library.util;
 
-import com.harish.library.dto.BookDto;
+import com.harish.library.dto.RequestDto;
 
 public class BookStoreUtil {
 	public static boolean isValidISBN(String isbn)
@@ -36,7 +36,7 @@ public class BookStoreUtil {
         return (sum % 11 == 0);
     }
 	
-	public static boolean sanitizeDto(BookDto book) {
+	public static boolean validateDto(RequestDto requestDto) {
 		return true;
 	}
 }

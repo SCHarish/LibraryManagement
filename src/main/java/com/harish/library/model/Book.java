@@ -13,43 +13,61 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * Representation of Book Table
  **/
 @Entity
+@Table(name = "Book")
 public class Book {
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
-//	private Long id;
-
-	@Id
-	@Column(name = "isbn", length = 50, nullable = false, unique = true)
+	
+	@Column(name = "isbn", length = 13, nullable = false, unique = true)
 	private String isbn;
 
-	@Column(name = "title", length = 100, nullable = false)
+	@Column(name = "title", length = 150, nullable = false)
 	private String title;
 	
+	private Author author;
+
+	//private Set<Tag_Temp> tags = new HashSet<Tag_Temp>();
+
+	@Id
+	public String getIsbn() {
+		return isbn;
+	}
+
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	public void setAuthor(Author author) {
+		this.author = author;
+	}
+	
+	@ManyToOne(targetEntity = Author.class, cascade=CascadeType.ALL)
+	public Author getAuthor() {
+		return author;
+	}
+
 	public Book(String isbn, String title) {
 		this.isbn = isbn;
 		this.title = title;
 	}
 	
 	public Book() {
-		
+		super();
 	}
-	
-//	@Column(name = "author_id", nullable = false)
-//	private Long author_id;
-//	
-//	//@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-////	@JoinTable(name = "tags", joinColumns = { @JoinColumn(name = "book_id") }, inverseJoinColumns = {
-//			//@JoinColumn(name = "tag_id") })
-//	private Set<Tag> tags = new HashSet<Tag>();
 }

@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
-import com.harish.library.dto.BookDto;
+import com.harish.library.dto.RequestDto;
 import com.harish.library.model.Book;
 
 public abstract class BulkImportService {

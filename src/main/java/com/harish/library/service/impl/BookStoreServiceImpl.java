@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.harish.library.dto.BookDto;
+import com.harish.library.dto.RequestDto;
 import com.harish.library.exceptions.DuplicateBookFoundException;
 import com.harish.library.exceptions.ISBNValueIsNullException;
 import com.harish.library.model.Book;
@@ -29,17 +29,17 @@ public class BookStoreServiceImpl implements IBookStoreService{
 	}	
 	
 	@Override
-	public Optional<BookDto> findByISBN(String isbn) throws ISBNValueIsNullException{
+	public Optional<RequestDto> findByISBN(String isbn) throws ISBNValueIsNullException{
 		try {
 			Optional<Book> book = bookStoreRepository.findById(isbn);
-			return Optional.of(modelMapper.map(book, BookDto.class)); 
+			return Optional.of(modelMapper.map(book, RequestDto.class)); 
 		} catch(IllegalArgumentException ex) {
 			throw new ISBNValueIsNullException("ISBN value is null");
 		}
 	}
 	
 	@Override
-	public void addBook(BookDto bookDto) throws DuplicateBookFoundException{
+	public void addBook(RequestDto bookDto) throws DuplicateBookFoundException{
 		//Check if book is already present
         Optional<Book> bookById = bookStoreRepository.findById(bookDto.getIsbn());
         
@@ -55,12 +55,13 @@ public class BookStoreServiceImpl implements IBookStoreService{
 	}
 	
 	@Override
-	public void updateBook(BookDto book) {
-		
+	public void updateBook(RequestDto bookDto) {
+		Book book = modelMapper.map(bookDto, Book.class);
+        bookStoreRepository.save(book);
 	}
 	
 	@Override
 	public void deleteBook(String isbn) {
-		
+		bookStoreRepository.deleteById(isbn);
 	}	
 }

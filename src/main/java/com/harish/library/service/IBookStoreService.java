@@ -2,9 +2,7 @@ package com.harish.library.service;
 
 import java.util.Optional;
 
-import com.harish.library.dto.BookDto;
-import com.harish.library.exceptions.DuplicateBookFoundException;
-import com.harish.library.model.Book;
+import com.harish.library.dto.RequestDto;
 
 public interface IBookStoreService {
 	/**
@@ -12,19 +10,19 @@ public interface IBookStoreService {
 	 * @param isbn
 	 * @return
 	 */
-	public Optional<BookDto> findByISBN(String isbn);
+	public Optional<RequestDto> findByISBN(String isbn);
 	
 	/**
 	 * 
-	 * @param book
+	 * @param bookDto
 	 */
-	public void addBook(BookDto book);
+	public void addBook(RequestDto book);
 	
 	/**
 	 * 
-	 * @param book
+	 * @param bookDto
 	 */
-	public void updateBook(BookDto book);
+	public void updateBook(RequestDto bookDto);
 	
 	/**
 	 * 

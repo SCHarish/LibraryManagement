@@ -1,37 +1,62 @@
 package com.harish.library.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
-public enum Tag {
-    LITERATURE(0),
-    NONFICTION(1),
-    ACTION(2),
-    THRILLER(3),
-    TECHNOLOGY(4),
-    DRAMA(5),
-    POETRY(6),
-    MEDIA(7),
-    OTHERS(8);
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
-    private int value;
-    private static Map map = new HashMap<>();
+@Entity
+@Table(name = "tags")
+public class Tag {
 
-    private Tag(int value) {
-        this.value = value;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-    static {
-        for (Tag category : Tag.values()) {
-            map.put(category.value, category);
-        }
-    }
+	@Column(name = "name", length = 50, nullable = false, unique = true)
+	private String name;
 
-    public static Tag valueOf(int category) {
-        return (Tag) map.get(category);
-    }
+//	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "tags")
+//	private Set<Book> books = new HashSet<Book>();
 
-    public int getValue() {
-        return value;
-    }
+	public Tag(String name) {
+		this.name = name;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+//	public Set<Book> getBooks() {
+//		return books;
+//	}
+//
+//	public void setBooks(Set<Book> books) {
+//		this.books = books;
+//	}
+
+	public Tag() {
+		super();
+	}
+
 }

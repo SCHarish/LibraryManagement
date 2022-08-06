@@ -11,4 +11,6 @@ public interface IBookSearchService {
 	Optional<List<Book>> searchBookByTag(String tag);
 	
 	Optional<List<Book>> searchBookByAuthor(String author);
+
+	List<Book> searchBooks(String keyword);
 }

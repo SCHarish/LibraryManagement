@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 
-import com.harish.library.dto.BookDto;
+import com.harish.library.dto.RequestDto;
 import com.harish.library.exceptions.BookNotFoundException;
 import com.harish.library.model.Book;
 import com.harish.library.repository.BookStoreRepository;
