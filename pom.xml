@@ -14,7 +14,6 @@
 	<name>LibraryManagementApp</name>
 	<description>Library Management Application</description>
 	
-	
 	<properties>
         <java.version>11</java.version>
         <lombok.version>1.16.18</lombok.version>
@@ -27,6 +26,7 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- Useful for Dev debugging -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -55,11 +55,11 @@
 		
 		 <!-- Lombok -->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <optional>true</optional>
-        </dependency>
+		  <groupId>org.projectlombok</groupId>
+		  <artifactId>lombok</artifactId>
+		  <version>1.18.20</version>
+		  <scope>provided</scope>
+		</dependency>
         
         <!-- Swagger -->
         <dependency>
@@ -72,6 +72,28 @@
             <artifactId>springfox-swagger-ui</artifactId>
             <version>${swagger.version}</version>
         </dependency>
+        
+        <!-- Model mapper to convert model objects to view objects and vice-versa -->
+        <dependency>
+		    <groupId>org.modelmapper</groupId>
+		    <artifactId>modelmapper</artifactId>
+		    <version>2.4.4</version>
+		</dependency>
+		
+		<!--Bean validation-->
+		<dependency>
+		    <groupId>javax.validation</groupId>
+		    <artifactId>validation-api</artifactId>
+		    <version>2.0.1.Final</version>
+		</dependency>
+		
+		<!-- Junit4 for unit testing -->
+		<dependency>
+	    	<groupId>junit</groupId>
+		    <artifactId>junit</artifactId>
+		    <version>4.12</version>
+		    <scope>test</scope>
+		</dependency>
         
 	</dependencies>
 
