@@ -27,10 +27,9 @@ public class RequestDto {
 	Author author;
 	
 	@NotNull
-	@JsonProperty("tag")
+	@JsonProperty("tags")
 	@ApiModelProperty(value = "Tag information")
-	Tag[] tag;
-	
+	String[] tags;
 
 	public String getIsbn() {
 		return isbn;
@@ -56,12 +55,12 @@ public class RequestDto {
 		this.author = author;
 	}
 
-	public Tag[] getTag() {
-		return tag;
+	public String[] getTags() {
+		return tags;
 	}
 
-	public void setTag(Tag[] tag) {
-		this.tag = tag;
+	public void setTags(String[] tags) {
+		this.tags = tags;
 	}
 	
 	public RequestDto() {

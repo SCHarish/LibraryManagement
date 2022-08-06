@@ -27,6 +27,10 @@ import com.harish.library.service.IBookStoreService;
 import com.harish.library.util.BookStoreUtil;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ApiParam;
 
 /**
  * Controller for the CRUD operations on Book entity
@@ -48,12 +52,19 @@ public class BookStoreController {
 	public ResponseEntity<Object> addBook(@RequestBody RequestDto RequestDto) throws DuplicateBookFoundException{	
 		BookStoreUtil.validateDto(RequestDto);
 		bookStoreService.addBook(RequestDto);	
-		return ResponseEntity.status(HttpStatus.CREATED).body("");
+		return ResponseEntity.status(HttpStatus.CREATED).body("New book added successfully");
 	}
 	
 	@GetMapping("/Books/{isbn}")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Optional<Book>> getBook(@PathVariable String isbn) throws InvalidISBNException, BookNotFoundException{
+	@ApiOperation(value = "getBook", nickname = "getBook")
+	@ApiResponses(value = {
+	@ApiResponse(code = 500, message = "Server error"),
+	@ApiResponse(code = 404, message = "Unable to find the book"),
+	@ApiResponse(code = 200, message = "OK",
+	response = Book.class, responseContainer = "List") })
+	public ResponseEntity<Optional<Book>> getBook( @ApiParam(value = "isbn",
+	        required = true, defaultValue = "") @PathVariable String isbn) throws InvalidISBNException, BookNotFoundException{
 		
 		if(isbn == null || isbn.isEmpty()) {
 			throw new ISBNValueIsNullException("ISBN value cannot be null");
@@ -80,7 +91,7 @@ public class BookStoreController {
 	public ResponseEntity<Object> updateBook(@RequestBody RequestDto RequestDto) {
 		BookStoreUtil.validateDto(RequestDto);
 		bookStoreService.updateBook(RequestDto);
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Book information updated successfully");
 	}
 	
 	@DeleteMapping("/Books/{isbn}")
@@ -97,6 +108,6 @@ public class BookStoreController {
 		}
 				
 		bookStoreService.deleteBook(isbn);
-		return ResponseEntity.status(HttpStatus.OK).body("");
+		return ResponseEntity.status(HttpStatus.OK).body("Book information deleted successfully");
 	}
 }

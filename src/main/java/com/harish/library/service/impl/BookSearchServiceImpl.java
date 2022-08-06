@@ -11,7 +11,6 @@ import com.harish.library.exceptions.ISBNValueIsNullException;
 import com.harish.library.exceptions.NoResultsFoundException;
 import com.harish.library.model.Book;
 import com.harish.library.repository.BookStoreRepository;
-import com.harish.library.service.BulkImportService;
 import com.harish.library.service.IBookSearchService;
 
 public class BookSearchServiceImpl implements IBookSearchService {

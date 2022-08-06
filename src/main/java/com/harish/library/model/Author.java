@@ -46,6 +46,7 @@ public class Author {
 		this.name = name;
 	}
 
+	//An author can write many books
 	@OneToMany(mappedBy = "author")
 	public Set<Book> getBooks() {
 		return books;

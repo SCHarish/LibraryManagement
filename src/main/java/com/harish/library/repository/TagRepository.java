@@ -1,10 +1,16 @@
 package com.harish.library.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
-import com.harish.library.model.Author;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
 import com.harish.library.model.Tag;
 
 public interface TagRepository extends JpaRepository<Tag, Integer> {
-
+	
+	@Query(nativeQuery = true, value = "SELECT * FROM TAGS t WHERE t.name IN (:names)")
+	public List<Tag> getTags(List<String> names);
+	
+	public Tag findTagByName(String name);
 }
