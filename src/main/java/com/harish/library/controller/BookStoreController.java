@@ -53,7 +53,7 @@ public class BookStoreController {
 	
 	@GetMapping("/Books/{isbn}")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Optional<RequestDto>> getBook(@PathVariable String isbn) throws InvalidISBNException, BookNotFoundException{
+	public ResponseEntity<Optional<Book>> getBook(@PathVariable String isbn) throws InvalidISBNException, BookNotFoundException{
 		
 		if(isbn == null || isbn.isEmpty()) {
 			throw new ISBNValueIsNullException("ISBN value cannot be null");
@@ -65,7 +65,7 @@ public class BookStoreController {
 			throw new InvalidISBNException("Please provide valid ISBN");	
 		}
 				
-		Optional<RequestDto> book = bookStoreService.findByISBN(isbn);
+		Optional<Book> book = bookStoreService.findByISBN(isbn);
 		
 	
 		if(book.isEmpty()) {

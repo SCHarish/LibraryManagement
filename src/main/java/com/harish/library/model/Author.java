@@ -4,6 +4,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,8 +12,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+
 @Entity
 @Table(name="Author")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "books"})
 public class Author {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +26,7 @@ public class Author {
 	@Column(name = "name", length = 100, nullable = false)
 	private String name;
 	
-	@OneToMany(targetEntity=Book.class, cascade = CascadeType.ALL)
+	@OneToMany(targetEntity=Book.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="author_id", referencedColumnName = "id")
 	private Set<Book> books;
 

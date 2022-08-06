@@ -35,7 +35,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
   public final ResponseEntity<Object> handleInvalidISBN(InvalidISBNException ex, WebRequest request) {
     List<String> details = new ArrayList<>();
     details.add(ex.getLocalizedMessage());
-    ErrorResponse error = new ErrorResponse("Record Not Found", details);
+    ErrorResponse error = new ErrorResponse("Invalid ISBN", details);
     return new ResponseEntity(error, HttpStatus.UNPROCESSABLE_ENTITY);
   }
   

@@ -29,10 +29,10 @@ public class BookStoreServiceImpl implements IBookStoreService{
 	}	
 	
 	@Override
-	public Optional<RequestDto> findByISBN(String isbn) throws ISBNValueIsNullException{
+	public Optional<Book> findByISBN(String isbn) throws ISBNValueIsNullException{
 		try {
 			Optional<Book> book = bookStoreRepository.findById(isbn);
-			return Optional.of(modelMapper.map(book, RequestDto.class)); 
+			return book;
 		} catch(IllegalArgumentException ex) {
 			throw new ISBNValueIsNullException("ISBN value is null");
 		}
@@ -41,15 +41,15 @@ public class BookStoreServiceImpl implements IBookStoreService{
 	@Override
 	public void addBook(RequestDto bookDto) throws DuplicateBookFoundException{
 		//Check if book is already present
-        Optional<Book> bookById = bookStoreRepository.findById(bookDto.getIsbn());
+        Optional<Book> bookInfo = bookStoreRepository.findById(bookDto.getIsbn());
         
-        bookById.ifPresent(book -> {
-            throw new DuplicateBookFoundException("Book with same isbn is alread present");
+        bookInfo.ifPresent(book -> {
+            throw new DuplicateBookFoundException("Book with same isbn is already present");
         });
         
-        if (!bookById.isPresent()) {
+        if (!bookInfo.isPresent()) {
             LOGGER.info("No duplicate book found");
-            Book book = modelMapper.map(bookDto, Book.class);
+            Book book = modelMapper.map(bookDto, Book.class);//converting dto to domain object
             bookStoreRepository.save(book);
         }
 	}

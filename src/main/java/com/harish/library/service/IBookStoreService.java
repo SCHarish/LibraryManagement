@@ -3,6 +3,7 @@ package com.harish.library.service;
 import java.util.Optional;
 
 import com.harish.library.dto.RequestDto;
+import com.harish.library.model.Book;
 
 public interface IBookStoreService {
 	/**
@@ -10,7 +11,7 @@ public interface IBookStoreService {
 	 * @param isbn
 	 * @return
 	 */
-	public Optional<RequestDto> findByISBN(String isbn);
+	public Optional<Book> findByISBN(String isbn);
 	
 	/**
 	 * 

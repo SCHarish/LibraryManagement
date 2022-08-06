@@ -63,4 +63,8 @@ public class RequestDto {
 	public void setTag(Tag[] tag) {
 		this.tag = tag;
 	}
+	
+	public RequestDto() {
+		super();
+	}
 }
