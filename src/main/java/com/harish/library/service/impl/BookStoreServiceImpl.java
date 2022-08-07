@@ -124,12 +124,6 @@ public class BookStoreServiceImpl implements IBookStoreService {
 	}
 
 	@Override
-	public Set<Book> searchBooks(String keyword) {
-		Set<Book> bookList = bookStoreRepository.searchBooks(keyword);
-		return bookList;
-	}
-
-	@Override
 	public Set<Book> findByTitle(String title) {
 		Set<Book> bookList = bookStoreRepository.findByTitle(title);
 		return bookList;

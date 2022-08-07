@@ -44,13 +44,6 @@ public interface IBookStoreService {
 	 * @param requestDtoList
 	 */
 	public void addBooks(List<BookRequestDto> requestDtoList);
-
-	/**
-	 * 
-	 * @param keyword
-	 * @return
-	 */
-	public Set<Book> searchBooks(String keyword);
 	
 	/**
 	 * 

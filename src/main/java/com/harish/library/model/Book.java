@@ -74,6 +74,7 @@ public class Book {
 
 	public void setTags(Set<Tag> tags) {
 		this.tags = tags;
+		tags.stream().forEach(tag -> tag.setBook(this));
 	}
 
 	public Book() {

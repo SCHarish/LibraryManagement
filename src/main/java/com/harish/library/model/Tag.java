@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "tags")
-//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "books"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "books"})
 public class Tag {
 
 	@Id
@@ -43,6 +43,9 @@ public class Tag {
 		this.name = name;
 	}
 	
+	public void setBook(Book book) {
+		this.books.add(book);
+	}
 
 	public Set<Book> getBooks() {
 		return books;

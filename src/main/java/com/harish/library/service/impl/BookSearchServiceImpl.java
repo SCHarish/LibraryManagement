@@ -47,7 +47,8 @@ public class BookSearchServiceImpl implements IBookSearchService {
 	}
 
 	public Set<Book> searchBooksByTag(String name) {
-		List<Tag> tagList = tagStoreService.getTagsByName(name);
+		Set<Tag> tagList = tagStoreService.getTagsByName(name);
+		List<String> list = tagStoreService.findISBNByTagName(name);
 		Set<Book> bookList = new HashSet<Book>();
 		tagList.forEach(tag -> bookList.addAll(tag.getBooks()));
 		return bookList;
