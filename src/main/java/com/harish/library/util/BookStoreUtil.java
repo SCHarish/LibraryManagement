@@ -3,6 +3,7 @@ package com.harish.library.util;
 import java.util.List;
 
 import com.harish.library.dto.RequestDto;
+import com.harish.library.model.Author;
 import com.harish.library.model.Book;
 import com.harish.library.model.Tag;
 
@@ -23,9 +24,9 @@ public class BookStoreUtil {
 		return true;
 	}
 	
-	public static Book constructBook(RequestDto requestDto, List<Tag> tagList){
+	public static Book constructBook(RequestDto requestDto, Author author, List<Tag> tagList){
 		var book = new Book.BookBuilder(requestDto.getIsbn(), requestDto.getTitle())
-				.Author(requestDto.getAuthor()).Tags(tagList).build();
+				.Author(author).Tags(tagList).build();
         return book;
 	}
 }

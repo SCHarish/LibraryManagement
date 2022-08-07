@@ -37,7 +37,7 @@ public class Book {
 	private Author author;
 	
 //	@ElementCollection(targetClass=Tag.class)
-	private Set<Tag> tags;
+	private Set<Tag> tags = new HashSet<Tag>();
 
 	@Id
 	public String getIsbn() {
@@ -67,7 +67,7 @@ public class Book {
 	}
 	
 	// A book can have many tags and vice-versa
-	@ManyToMany(cascade = CascadeType.MERGE)
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 		name = "book_tags", 
 		joinColumns = @JoinColumn(name= "book_isbn"),
@@ -78,7 +78,7 @@ public class Book {
 	}
 
 	public void setTags(Set<Tag> funnyTag) {
-		this.tags = funnyTag;
+		//this.tags = funnyTag;
 	}
 	
 	public Book() {

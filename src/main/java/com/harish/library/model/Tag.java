@@ -31,7 +31,8 @@ public class Tag {
 	private String name;
 
 	@ElementCollection(targetClass=Book.class)
-	private Set<Book> books;
+	@ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL) 
+	private Set<Book> books = new HashSet<Book>();
 
 	public Tag(String name) {
 		this.name = name;
@@ -53,7 +54,7 @@ public class Tag {
 		this.name = name;
 	}
 	
-	@ManyToMany(mappedBy = "book_tags", cascade = CascadeType.ALL) 
+
 	public Set<Book> getBooks() {
 		return books;
 	}

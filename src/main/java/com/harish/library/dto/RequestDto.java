@@ -22,9 +22,9 @@ public class RequestDto {
 	String title;
 
 	@NotNull
-	@JsonProperty("author")
+	@JsonProperty("author_id")
 	@ApiModelProperty(value = "Author information")
-	Author author;
+	Long author_id;
 	
 	@NotNull
 	@JsonProperty("tags")
@@ -47,12 +47,12 @@ public class RequestDto {
 		this.title = title;
 	}
 	
-	public Author getAuthor() {
-		return author;
+	public Long getAuthorId() {
+		return author_id;
 	}
 
-	public void setAuthor(Author author) {
-		this.author = author;
+	public void setAuthorId(Long author_id) {
+		this.author_id = author_id;
 	}
 
 	public String[] getTags() {

@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Author {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private Long id;
 
 	@Column(name = "name", length = 100, nullable = false)
 	private String name;
@@ -30,11 +30,11 @@ public class Author {
 	@JoinColumn(name="author_id", referencedColumnName = "id")
 	private Set<Book> books;
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
