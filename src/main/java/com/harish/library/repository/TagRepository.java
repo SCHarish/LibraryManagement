@@ -9,7 +9,7 @@ import com.harish.library.model.Author;
 import com.harish.library.model.Book;
 import com.harish.library.model.Tag;
 
-public interface TagRepository extends JpaRepository<Tag, Integer> {
+public interface TagRepository extends JpaRepository<Tag, Long> {
 	
 	@Query(nativeQuery = true, value = "SELECT * FROM TAGS t WHERE t.name IN (:names)")
 	public List<Tag> getTags(List<String> names);

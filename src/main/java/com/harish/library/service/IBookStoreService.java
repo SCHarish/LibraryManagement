@@ -25,13 +25,13 @@ public interface IBookStoreService {
 	 * 
 	 * @param bookDto
 	 */
-	public void addBook(BookRequestDto book);
+	public Book addBook(BookRequestDto book);
 	
 	/**
 	 * 
 	 * @param bookDto
 	 */
-	public void updateBook(BookRequestDto bookDto);
+	public Book updateBook(BookRequestDto bookDto);
 	
 	/**
 	 * 

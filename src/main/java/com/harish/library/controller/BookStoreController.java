@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.harish.library.dto.BookRequestDto;
+import com.harish.library.dto.ResponseDto;
 import com.harish.library.dto.BookRequestDto;
 import com.harish.library.exceptions.BookNotFoundException;
 import com.harish.library.exceptions.DuplicateBookFoundException;
@@ -53,8 +54,9 @@ public class BookStoreController {
 	public ResponseEntity<Object> addBook(@RequestBody BookRequestDto RequestDto)
 			throws DuplicateBookFoundException, InvalidDataException {
 		BookStoreUtil.validateBookRequestDto(RequestDto);
-		bookStoreService.addBook(RequestDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body("New book added successfully");
+		Book newBook = bookStoreService.addBook(RequestDto);
+		var responseDto = new ResponseDto.ResponseDtoBuilder("Book added successfully").payload(newBook).build();
+		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
 
 	@GetMapping("/books/{isbn}")
@@ -84,8 +86,9 @@ public class BookStoreController {
 	@PutMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> updateBook(@RequestBody BookRequestDto RequestDto) throws InvalidDataException {
 		BookStoreUtil.validateBookRequestDto(RequestDto);
-		bookStoreService.updateBook(RequestDto);
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Book information updated successfully");
+		Book updatedBook = bookStoreService.updateBook(RequestDto);
+		var responseDto = new ResponseDto.ResponseDtoBuilder("Book information updated successfully").payload(updatedBook).build();
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseDto);
 	}
 
 	@DeleteMapping("/books/{isbn}")

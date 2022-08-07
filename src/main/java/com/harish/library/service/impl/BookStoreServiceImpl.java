@@ -64,7 +64,7 @@ public class BookStoreServiceImpl implements IBookStoreService {
 	}
 
 	@Override
-	public void addBook(BookRequestDto bookDto) throws DuplicateBookFoundException {
+	public Book addBook(BookRequestDto bookDto) throws DuplicateBookFoundException {
 		// Check if book is already present
 		Optional<Book> bookInfo = bookStoreRepository.findById(bookDto.getIsbn());
 
@@ -83,14 +83,14 @@ public class BookStoreServiceImpl implements IBookStoreService {
 
 			// converting dto to domain object
 			Book newBook = BookStoreUtil.constructBook(bookDto, authorInfo.get(), newTagList);
-			bookStoreRepository.save(newBook);
+			return bookStoreRepository.save(newBook);
 		} else {
 			throw new AuthorNotFoundException("Author not found exception");
 		}
 	}
 
 	@Override
-	public void updateBook(BookRequestDto bookDto) {
+	public Book updateBook(BookRequestDto bookDto) {
 		// Check Author exist in author table
 		Optional<Author> authorInfo = authorStoreService.getAuthor(bookDto.getAuthorId());
 
@@ -100,7 +100,7 @@ public class BookStoreServiceImpl implements IBookStoreService {
 
 			// converting dto to domain object
 			Book updateBook = BookStoreUtil.constructBook(bookDto, authorInfo.get(), newTagList);
-			bookStoreRepository.save(updateBook);
+			return bookStoreRepository.save(updateBook);
 		} else {
 			throw new AuthorNotFoundException("Author not found exception");
 		}
