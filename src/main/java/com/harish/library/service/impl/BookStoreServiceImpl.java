@@ -24,105 +24,96 @@ import com.harish.library.repository.AuthorRepository;
 import com.harish.library.repository.BookStoreRepository;
 //import com.harish.library.repository.BookTagRepository;
 import com.harish.library.repository.TagRepository;
+import com.harish.library.service.IAuthorStoreService;
 import com.harish.library.service.IBookStoreService;
 import com.harish.library.util.BookStoreUtil;
 import com.harish.library.model.Tag;
 
 @Service
-public class BookStoreServiceImpl implements IBookStoreService{
-	
+public class BookStoreServiceImpl implements IBookStoreService {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(BookStoreServiceImpl.class);
 	private final BookStoreRepository bookStoreRepository;
-	private final ModelMapper modelMapper;
-	private final TagRepository tagRepository;
-	private final AuthorRepository authorRepository;
-	//private final BookTagRepository bookTagRepository;
+	// private final BookTagRepository bookTagRepository;
 
 	@Autowired
-	public BookStoreServiceImpl(BookStoreRepository bookRepository, TagRepository tagRepository, ModelMapper modelMapper, AuthorRepository authorRepository){
+	private IAuthorStoreService authorStoreService;
+
+	@Autowired
+	public BookStoreServiceImpl(BookStoreRepository bookRepository) {
 		this.bookStoreRepository = bookRepository;
-		this.modelMapper = modelMapper;
-		this.tagRepository = tagRepository;
-		//this.bookTagRepository = bookTagRepository;
-		this.authorRepository = authorRepository;
-	}	
-	
+	}
+
 	@Override
-	public Optional<Book> findByISBN(String isbn) throws ISBNValueIsNullException{
+	public Optional<Book> findByISBN(String isbn) throws ISBNValueIsNullException {
 		try {
 			Optional<Book> book = bookStoreRepository.findById(isbn);
 			return book;
-		} catch(IllegalArgumentException ex) {
+		} catch (IllegalArgumentException ex) {
 			throw new ISBNValueIsNullException("ISBN value is null");
 		}
 	}
-	
+
 	@Override
-	public void addBook(RequestDto bookDto) throws DuplicateBookFoundException{
-		//Check if book is already present
-        Optional<Book> bookInfo = bookStoreRepository.findById(bookDto.getIsbn());
-        
-        bookInfo.ifPresent(book -> {
-            throw new DuplicateBookFoundException("Book with same isbn is already present");
-        });
-        
-        LOGGER.info("No duplicate book found");
-       
-        //Check Author exist in author table
-        Optional<Author> authorInfo = authorRepository.findById(bookDto.getAuthorId());
-        
-        if(authorInfo.isPresent()) {
-        	  List<String> tags = Arrays.asList(bookDto.getTags());
-              List<Tag> newtagList = new ArrayList();
-              //List<BookTags> bookTags = new ArrayList();
-              for(String tag : tags) {
-              	//Tag tagInfo =  tagRepository.findTagByName(tag);
-              	//if(tagInfo == null) {
-              	   var newTag = new Tag();
-              	   newTag.setName(tag);
-              	   newtagList.add(newTag);
-//              	} else {   	
-//              		var bookTag = new BookTags();
-//              		bookTags.add(bookTag);
-//              	}
-              }
-              Book newBook = BookStoreUtil.constructBook(bookDto, authorInfo.get(), newtagList);  
-              bookStoreRepository.save(newBook);    
-        } else {
-        	 throw new AuthorNotFoundException("Author not found exception");
-        }
+	public void addBook(RequestDto bookDto) throws DuplicateBookFoundException {
+		// Check if book is already present
+		Optional<Book> bookInfo = bookStoreRepository.findById(bookDto.getIsbn());
+
+		bookInfo.ifPresent(book -> {
+			throw new DuplicateBookFoundException("Book with same isbn is already present");
+		});
+
+		LOGGER.info("No duplicate book found");
+
+		// Check Author exist in author table
+		Optional<Author> authorInfo = authorStoreService.getAuthor(bookDto.getAuthorId());
+
+		if (authorInfo.isPresent()) {
+			List<String> tags = Arrays.asList(bookDto.getTags());
+			List<Tag> newTagList = BookStoreUtil.constructTags(tags);
+			
+			// converting dto to domain object
+			Book newBook = BookStoreUtil.constructBook(bookDto, authorInfo.get(), newTagList);
+			bookStoreRepository.save(newBook);
+		} else {
+			throw new AuthorNotFoundException("Author not found exception");
+		}
 	}
-	
+
 	@Override
 	public void updateBook(RequestDto bookDto) {
-		 //Check Author exist in author table
-        Optional<Author> authorInfo = authorRepository.findById(bookDto.getAuthorId());
-        
-        if(authorInfo.isPresent()) {
-        	//converting dto to domain object
-    		List<String> updatedTagList = Arrays.asList(bookDto.getTags());
-    		
-    		List<Tag> newtagList = new ArrayList();
-            //List<BookTags> bookTags = new ArrayList();
-            for(String tag : updatedTagList) {
-            	//Tag tagInfo =  tagRepository.findTagByName(tag);
-            	//if(tagInfo == null) {
-            	   var newTag = new Tag();
-            	   newTag.setName(tag);
-            	   newtagList.add(newTag);
-//    	        	} else {   	
-//    	        		var bookTag = new BookTags();
-//    	        		bookTags.add(bookTag);
-//    	        	}
-            }
-    	        
-            Book updateBook = BookStoreUtil.constructBook(bookDto, authorInfo.get(), newtagList); 
-            bookStoreRepository.save(updateBook);
-        } else {
-        	 throw new AuthorNotFoundException("Author not found exception");
-        }	
+		// Check Author exist in author table
+		Optional<Author> authorInfo = authorStoreService.getAuthor(bookDto.getAuthorId());
+
+		if (authorInfo.isPresent()) {
+			List<String> updatedTagList = Arrays.asList(bookDto.getTags());
+			List<Tag> newTagList = BookStoreUtil.constructTags(updatedTagList);
+
+			// converting dto to domain object
+			Book updateBook = BookStoreUtil.constructBook(bookDto, authorInfo.get(), newTagList);
+			bookStoreRepository.save(updateBook);
+		} else {
+			throw new AuthorNotFoundException("Author not found exception");
+		}
 	}
-	
+
+	@Override
+	public void addBooks(List<RequestDto> requestDtoList) {
+		List<Book> newBooks = new ArrayList<Book>();
+		requestDtoList.forEach((requestDto) -> {
+			Optional<Author> authorInfo = authorStoreService.getAuthor(requestDto.getAuthorId());
+			if (authorInfo.isPresent()) {
+				List<String> updatedTagList = Arrays.asList(requestDto.getTags());
+				List<Tag> newTagList = BookStoreUtil.constructTags(updatedTagList);
+
+				// converting dto to domain object
+				Book newBook = BookStoreUtil.constructBook(requestDto, authorInfo.get(), newTagList);
+				newBooks.add(newBook);
+			}
+		});
+		bookStoreRepository.saveAll(newBooks);
+	}
+
 	@Override
 	public void deleteBook(String isbn) {
 		bookStoreRepository.deleteById(isbn);

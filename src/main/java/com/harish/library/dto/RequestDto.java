@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class RequestDto {
 	@NotNull
-	@Pattern(regexp = "*")
 	@JsonProperty("isbn")
 	@ApiModelProperty(value = "ISBN no. of the book")
 	String isbn;
@@ -65,5 +64,12 @@ public class RequestDto {
 	
 	public RequestDto() {
 		super();
+	}
+	
+	public RequestDto(String isbn, String title, Long author_id, String[] tags) {
+		this.isbn = isbn;
+		this.title = title;
+		this.author_id = author_id;
+		this.tags = tags;
 	}
 }

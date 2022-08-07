@@ -1,5 +1,6 @@
 package com.harish.library.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.harish.library.dto.RequestDto;
@@ -30,4 +31,10 @@ public interface IBookStoreService {
 	 * @param isbn
 	 */
 	public void deleteBook(String isbn);
+	
+	/**
+	 * 
+	 * @param requestDtoList
+	 */
+	public void addBooks(List<RequestDto> requestDtoList);
 }

@@ -1,10 +1,13 @@
 package com.harish.library.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +19,7 @@ import com.harish.library.dto.RequestDto;
 import com.harish.library.dto.ResponseDto;
 import com.harish.library.exceptions.DuplicateBookFoundException;
 import com.harish.library.model.Author;
+import com.harish.library.model.Book;
 import com.harish.library.service.IAuthorStoreService;
 import com.harish.library.service.IBookStoreService;
 import com.harish.library.util.BookStoreUtil;
@@ -45,5 +49,13 @@ public class AuthorController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Object> getAllAuthors() {	
 		return null;
+	}
+	
+	@GetMapping(value = "/Authors/{id}")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<Optional<Author>> getAuthor(@PathVariable Long id) {	
+		Optional<Author> author = authorStoreService.getAuthor(id);
+		new ResponseEntity<RequestDto>(HttpStatus.OK);
+		return ResponseEntity.ok(author);
 	}
 }

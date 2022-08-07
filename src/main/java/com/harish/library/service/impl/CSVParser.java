@@ -1,43 +1,47 @@
 package com.harish.library.service.impl;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import com.harish.library.model.Book;
+import com.harish.library.dto.RequestDto;
 import com.harish.library.service.FileParser;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 
-import com.fasterxml.jackson.databind.ObjectReader;
+@Component(value = "csvparser")
+public class CSVParser implements FileParser {
+	private static final Logger LOGGER = LoggerFactory.getLogger(CSVParser.class);
 
-public class CSVParser<Book> implements FileParser{
-	private static final CsvMapper mapper = new CsvMapper();
-	private static final Logger LOGGER = LoggerFactory.getLogger(FileParser.class);
-			
-	public List<Book> importDataFromFile(String filePath){
-		//validate filePath	
-		return null;
-	}
-	
-//	
-//    public List<Book> read(Class<T> clazz, InputStream stream) {
-//        CsvSchema schema = mapper.schemaFor(clazz).withHeader().withColumnReordering(true);
-//        ObjectReader reader = mapper.readerFor(clazz).with(schema);
-//        return reader.<Book>readValues(stream).readAll();
-//    }
-
+	@Autowired
+	private ModelMapper mapper;
 
 	@Override
-	public List read(Class clazz, InputStream stream) throws IOException {
-		// TODO Auto-generated method stub
-		CsvSchema schema = mapper.schemaFor(clazz).withHeader().withColumnReordering(true);
-         ObjectReader reader = mapper.readerFor(clazz).with(schema);
-         List<Object> objList = reader.readValues(stream).readAll();
-         return null;
-	}
+	public List<RequestDto> read(MultipartFile file) throws IOException {
+		List<RequestDto> booksInCSV = new ArrayList<RequestDto>();
+		// parse CSV file to create a list of `RequestDto` objects
+		try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
 
+			// create csv bean reader
+			CsvToBean<RequestDto> csvToBean = new CsvToBeanBuilder(reader).withSeparator(',').withType(RequestDto.class)
+					.build();
+
+			// convert `CsvToBean` object to list of users
+			booksInCSV = csvToBean.parse();
+		} catch (Exception ex) {
+			LOGGER.error("Error occurred in file parsing");
+			throw new IOException();
+		}
+		return booksInCSV;
+	}
 }

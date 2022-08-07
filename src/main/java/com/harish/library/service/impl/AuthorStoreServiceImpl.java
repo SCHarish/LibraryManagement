@@ -1,5 +1,7 @@
 package com.harish.library.service.impl;
 
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,5 +26,10 @@ public class AuthorStoreServiceImpl implements IAuthorStoreService{
 	public Author addAuthor(AuthorRequestDto authorRequestDto) {
 		Author newAuthor = modelMapper.map(authorRequestDto, Author.class);
 		return authorRepository.save(newAuthor);
+	}
+	
+	public Optional<Author> getAuthor(Long id) {
+		Optional<Author> author = authorRepository.findById(id);
+		return author;
 	}
 }

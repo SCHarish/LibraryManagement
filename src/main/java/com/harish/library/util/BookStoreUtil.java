@@ -1,5 +1,6 @@
 package com.harish.library.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.harish.library.dto.RequestDto;
@@ -28,5 +29,22 @@ public class BookStoreUtil {
 		var book = new Book.BookBuilder(requestDto.getIsbn(), requestDto.getTitle())
 				.Author(author).Tags(tagList).build();
         return book;
+	}
+	
+	public static List<Tag> constructTags(List<String> tags){
+		List<Tag> newtagList = new ArrayList();
+        //List<BookTags> bookTags = new ArrayList();
+        for(String tag : tags) {
+        	//Tag tagInfo =  tagRepository.findTagByName(tag);
+        	//if(tagInfo == null) {
+        	   var newTag = new Tag();
+        	   newTag.setName(tag);
+        	   newtagList.add(newTag);
+//	        	} else {   	
+//	        		var bookTag = new BookTags();
+//	        		bookTags.add(bookTag);
+//	        	}
+        }
+        return newtagList;
 	}
 }
