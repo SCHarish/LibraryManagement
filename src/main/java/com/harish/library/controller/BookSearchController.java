@@ -58,7 +58,7 @@ public class BookSearchController {
 			new ResponseEntity<BookRequestDto>(HttpStatus.OK);
 			return ResponseEntity.ok(bookCollection);
 		} else {
-			throw new NoResultsFoundException("No results found");
+			throw new NoResultsFoundException("No books found matching the given attribute");
 		}
 	}
 
@@ -66,7 +66,7 @@ public class BookSearchController {
 	public ResponseEntity<Set<Book>> searchBooksByTitle(@PathVariable String title) {
 		Set<Book> bookList = bookSearchService.searchBooksByTitle(title);
 		if(bookList.size() == 0) {
-			throw new NoResultsFoundException("No results found");
+			throw new NoResultsFoundException("No books found found with the given title");
 		}
 		new ResponseEntity<BookRequestDto>(HttpStatus.OK);
 		return ResponseEntity.ok(bookList);
@@ -77,7 +77,7 @@ public class BookSearchController {
 	public ResponseEntity<Set<Book>> searchBooksByAuthorId(@PathVariable Long author_id) {
 		Set<Book> bookList = bookSearchService.searchBooksByAuthorId(author_id);
 		if(bookList.size() == 0) {
-			throw new NoResultsFoundException("No results found");
+			throw new NoResultsFoundException("No books found with the given author id");
 		}
 		new ResponseEntity<BookRequestDto>(HttpStatus.OK);
 		return ResponseEntity.ok(bookList);
@@ -88,7 +88,7 @@ public class BookSearchController {
 	public ResponseEntity<Set<Book>> searchBooksByAuthorName(@RequestParam String author_name) {
 		Set<Book> bookList = bookSearchService.searchBooksByAuthorName(author_name);
 		if(bookList.size() == 0) {
-			throw new NoResultsFoundException("No results found");
+			throw new NoResultsFoundException("No books found with the given author name");
 		}
 		new ResponseEntity<BookRequestDto>(HttpStatus.OK);
 		return ResponseEntity.ok(bookList);
@@ -99,7 +99,7 @@ public class BookSearchController {
 	public ResponseEntity<Set<Book>> searchBooksByTag(@PathVariable String name) {
 		Set<Book> bookList = bookSearchService.searchBooksByTag(name);
 		if(bookList.size() == 0) {
-			throw new NoResultsFoundException("No results found");
+			throw new NoResultsFoundException("No books found with given tag name");
 		}
 		new ResponseEntity<BookRequestDto>(HttpStatus.OK);
 		return ResponseEntity.ok(bookList);

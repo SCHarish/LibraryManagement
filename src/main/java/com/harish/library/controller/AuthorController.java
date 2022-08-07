@@ -40,10 +40,10 @@ public class AuthorController {
 	
 	@PostMapping(value = "/authors", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseDto> addAuthor(@RequestBody AuthorRequestDto RequestDto) {
-	//	TODO :: validate Dto
-		//BookStoreUtil.validateAuthorRequestDto(requestDto);
-		Author author = authorStoreService.addAuthor(RequestDto);
+	public ResponseEntity<ResponseDto> addAuthor(@RequestBody AuthorRequestDto requestDto) {
+		//Validate author request DTO
+		BookStoreUtil.validateAuthorRequestDto(requestDto);
+		Author author = authorStoreService.addAuthor(requestDto);
 		var responseDto = new ResponseDto.ResponseDtoBuilder("Author created successfully").payload(author).build();
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
@@ -59,8 +59,7 @@ public class AuthorController {
 	public ResponseEntity<Optional<Author>> getAuthor(@PathVariable Long id) throws AuthorNotFoundException{	
 		Optional<Author> author = authorStoreService.getAuthor(id);
 		if(author.isPresent()) {
-			new ResponseEntity<BookRequestDto>(HttpStatus.OK);
-			return ResponseEntity.ok(author);
+			return ResponseEntity.status(HttpStatus.OK).body(author);			
 		} else {
 			throw new AuthorNotFoundException("No author found with the given author id : "+ id);
 		}

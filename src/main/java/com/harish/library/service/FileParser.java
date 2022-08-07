@@ -8,5 +8,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.harish.library.dto.BookRequestDto;
 
 public interface FileParser {
-  public List<BookRequestDto> parse(MultipartFile file) throws IOException; 
+	/**
+	 * Parse the CSV file and extracts book request DTO
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
+	public List<BookRequestDto> parse(MultipartFile file) throws IOException;
 }

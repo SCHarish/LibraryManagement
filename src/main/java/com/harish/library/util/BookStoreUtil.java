@@ -13,7 +13,17 @@ import com.harish.library.model.Book;
 import com.harish.library.model.Tag;
 
 public class BookStoreUtil {
-	public static boolean isValidISBN(String isbn) {
+	/**
+	 * 
+	 * @param isbn
+	 * @return
+	 * @throws InvalidDataException
+	 */
+	public static boolean isValidISBN(String isbn) throws InvalidDataException  {
+		if (isbn == null || isbn.isEmpty() || isbn.isBlank()) {
+			throw new InvalidDataException("ISBN value cannot be null");
+		}
+		
 		isbn = isbn.replaceAll("-", "");
 		int n = isbn.length();
 		if (n != 13) {
@@ -23,43 +33,61 @@ public class BookStoreUtil {
 
 	}
 
-	public static boolean validateBookRequestDto(BookRequestDto requestDto) throws InvalidDataException{
-		// check if author id is null?
+	/**
+	 * validate book request DTO
+	 * @param requestDto
+	 * @return
+	 * @throws InvalidDataException
+	 */
+	public static boolean validateBookRequestDto(BookRequestDto requestDto) throws InvalidDataException {
 		String isbn = requestDto.getIsbn();
-		if(isbn == null || isbn.isBlank() || isbn.isEmpty() || !isValidISBN(isbn))
+		if (!isValidISBN(isbn)) {
 			throw new InvalidDataException("Please provide valid ISBN");
+		}
 		return true;
 	}
 
+	/**
+	 * construct Book model object from Book request DTO
+	 * @param requestDto
+	 * @param author
+	 * @param tagList
+	 * @return
+	 */
 	public static Book constructBook(BookRequestDto requestDto, Author author, List<Tag> tagList) {
 		Set<Tag> tagSet = new HashSet<Tag>();
-        for (Tag tag : tagList) {
-        	tagSet.add(tag);
-        }
-        
+		for (Tag tag : tagList) {
+			tagSet.add(tag);
+		}
+
 		var book = new Book.BookBuilder(requestDto.getIsbn(), requestDto.getTitle()).Author(author).Tags(tagSet)
 				.build();
 		return book;
 	}
 
+	/**
+	 * Construct tag model objects from strings
+	 * @param tags
+	 * @return
+	 */
 	public static List<Tag> constructTags(List<String> tags) {
 		List<Tag> newtagList = new ArrayList();
-		// List<BookTags> bookTags = new ArrayList();
 		for (String tag : tags) {
-			// Tag tagInfo = tagRepository.findTagByName(tag);
-			// if(tagInfo == null) {
 			var newTag = new Tag();
 			newTag.setName(tag);
 			newtagList.add(newTag);
-//	        	} else {   	
-//	        		var bookTag = new BookTags();
-//	        		bookTags.add(bookTag);
-//	        	}
 		}
 		return newtagList;
 	}
-	
-	public void validateAuthorRequestDto(AuthorRequestDto requestDto) {
-		
+
+	/**
+	 * 
+	 * @param requestDto
+	 * @throws InvalidDataException
+	 */
+	public static void validateAuthorRequestDto(AuthorRequestDto requestDto) throws InvalidDataException {
+		String author_name = requestDto.getName();
+		if (author_name == null || author_name.isBlank() || author_name.isEmpty())
+			throw new InvalidDataException("Author name cannot be null");
 	}
 }

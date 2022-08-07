@@ -20,22 +20,21 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
 /**
  * Representation of Book Table
  **/
 @Entity
 @Table(name = "book")
 public class Book {
-	
+
 	@Column(name = "isbn", length = 13, nullable = false, unique = true)
 	private String isbn;
 
 	@Column(name = "title", length = 150, nullable = false)
 	private String title;
-	
+
 	private Author author;
-	
+
 //	@ElementCollection(targetClass=Tag.class)
 	private Set<Tag> tags = new HashSet<Tag>();
 
@@ -55,32 +54,28 @@ public class Book {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	public void setAuthor(Author author) {
 		this.author = author;
 	}
-	
+
 	// Many books can be written by one author
-	@ManyToOne(targetEntity = Author.class, cascade=CascadeType.ALL) 
+	@ManyToOne(targetEntity = Author.class, cascade = CascadeType.ALL)
 	public Author getAuthor() {
 		return author;
 	}
-	
+
 	// A book can have many tags and vice-versa
 	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(
-		name = "book_tags", 
-		joinColumns = @JoinColumn(name= "book_isbn"),
-		inverseJoinColumns = @JoinColumn(name = "tag_id")
-	)
+	@JoinTable(name = "book_tags", joinColumns = @JoinColumn(name = "book_isbn"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
 	public Set<Tag> getTags() {
 		return tags;
 	}
 
-	public void setTags(Set<Tag> funnyTag) {
-		this.tags = funnyTag;
+	public void setTags(Set<Tag> tags) {
+		this.tags = tags;
 	}
-	
+
 	public Book() {
 		super();
 	}
@@ -97,38 +92,38 @@ public class Book {
 		this.author = author;
 		this.tags = tags;
 	}
-	
+
 	private Book(BookBuilder builder) {
 		this.isbn = builder.isbn;
 		this.title = builder.title;
 		this.author = builder.author;
 		this.tags = builder.tags;
 	}
-	
-	public static class BookBuilder{
+
+	public static class BookBuilder {
 		private final String isbn;
 		private final String title;
 		private Author author;
 		private Set<Tag> tags;
-		
+
 		public BookBuilder(String isbn, String title) {
 			this.isbn = isbn;
 			this.title = title;
 		}
-		
+
 		public BookBuilder Author(Author author) {
 			this.author = author;
 			return this;
 		}
-		
+
 		public BookBuilder Tags(Set<Tag> tags) {
 			this.tags = tags;
 			return this;
 		}
-		
+
 		public Book build() {
 			var book = new Book(this);
-			//TODO :: validate book object
+			// TODO :: validate book object
 			return book;
 		}
 	}

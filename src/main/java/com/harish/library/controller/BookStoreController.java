@@ -50,7 +50,8 @@ public class BookStoreController {
 
 	@PostMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> addBook(@RequestBody BookRequestDto RequestDto) throws DuplicateBookFoundException, InvalidDataException {
+	public ResponseEntity<Object> addBook(@RequestBody BookRequestDto RequestDto)
+			throws DuplicateBookFoundException, InvalidDataException {
 		BookStoreUtil.validateBookRequestDto(RequestDto);
 		bookStoreService.addBook(RequestDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body("New book added successfully");
@@ -65,19 +66,10 @@ public class BookStoreController {
 	public ResponseEntity<Optional<Book>> getBook(
 			@ApiParam(value = "isbn", required = true, defaultValue = "") @PathVariable String isbn)
 			throws InvalidDataException, BookNotFoundException {
-
-		if (isbn == null || isbn.isEmpty()) {
-			throw new InvalidDataException("ISBN value cannot be null");
-		}
-
 		// Validate ISBN
-		boolean isValidISBN = BookStoreUtil.isValidISBN(isbn);
-		if (!isValidISBN) {
-			throw new InvalidDataException("Please provide valid ISBN");
-		}
-
+		BookStoreUtil.isValidISBN(isbn);
 		Optional<Book> book = bookStoreService.findBookByISBN(isbn);
-		
+
 		return ResponseEntity.status(HttpStatus.OK).body(book);
 	}
 
@@ -98,17 +90,7 @@ public class BookStoreController {
 
 	@DeleteMapping("/books/{isbn}")
 	public ResponseEntity<Object> deleteBook(@PathVariable String isbn) throws InvalidDataException {
-		if (isbn == null || isbn.isEmpty()) {
-			throw new IllegalArgumentException("Invalid request");
-			// return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request");
-		}
-
-		// Validate ISBN
-		boolean isValidISBN = BookStoreUtil.isValidISBN(isbn);
-		if (!isValidISBN) {
-			throw new InvalidDataException("Please provide valid ISBN");
-		}
-
+		BookStoreUtil.isValidISBN(isbn);
 		bookStoreService.deleteBook(isbn);
 		return ResponseEntity.status(HttpStatus.OK).body("Book information deleted successfully");
 	}

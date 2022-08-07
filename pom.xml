@@ -17,7 +17,6 @@
 
 	<properties>
 		<java.version>11</java.version>
-		<lombok.version>1.16.18</lombok.version>
 		<swagger.version>2.6.1</swagger.version>
 	</properties>
 
@@ -41,7 +40,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- JPA Persistence -->
+		<!-- Sprint data JPA for Persistence -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -73,24 +72,14 @@
 			<version>2.4.4</version>
 		</dependency>
 
+		<!-- Useful for bean validation -->
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 			<version>2.0.1.Final</version>
 		</dependency>
 		
-		<!-- <dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>2.13.3</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.9.8</version>
-		</dependency> -->
-
+		<!-- Jackson annotations to exclude null fields from response -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
@@ -112,12 +101,6 @@
 			<version>5.0</version>
 		</dependency>
 
-		<dependency>
-			<groupId>net.sf.supercsv</groupId>
-			<artifactId>super-csv</artifactId>
-			<version>2.4.0</version>
-		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -127,8 +110,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<excludes>
-						<!-- <exclude> <groupId>org.projectlombok</groupId> <artifactId>lombok</artifactId> 
-							</exclude> -->
 					</excludes>
 				</configuration>
 			</plugin>

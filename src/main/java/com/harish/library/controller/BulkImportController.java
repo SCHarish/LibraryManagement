@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.harish.library.dto.ResponseDto;
 import com.harish.library.service.IBulkDataImportService;
 
 import io.swagger.annotations.Api;
@@ -27,8 +28,9 @@ public class BulkImportController {
 	}
 	
 	@PostMapping(value = "/upload/books")
-    public ResponseEntity uploadBooksFromCSV(@RequestParam("sampleCSV") MultipartFile file) throws IOException {
+    public ResponseEntity<Object> uploadBooksFromCSV(@RequestParam("sampleCSV") MultipartFile file) throws IOException {
 		bulkDataImportService.importFromFile(file);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Books imported successfully");
+		var responseDto = new ResponseDto.ResponseDtoBuilder("Books imported successfully from CSV").build();
+		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 }

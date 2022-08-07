@@ -30,8 +30,8 @@ public class Tag {
 	@Column(name = "name", length = 50, nullable = false)
 	private String name;
 
-	@ElementCollection(targetClass=Book.class)
-	@ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL, fetch = FetchType.EAGER) 
+	@ElementCollection(targetClass = Book.class)
+	@ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Book> books = new HashSet<Book>();
 
 	public Tag(String name) {
@@ -53,7 +53,6 @@ public class Tag {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
 
 	public Set<Book> getBooks() {
 		return books;
