@@ -32,7 +32,7 @@ public class BulkDataImportServiceImpl implements IBulkDataImportService{
 	}
 	
 	public void importFromFile(MultipartFile file) throws IOException {
-		List<BookRequestDto> requestDtoList = parser.read(file);
+		List<BookRequestDto> requestDtoList = parser.parse(file);
 		bookStoreService.addBooks(requestDtoList);
 	}
 }

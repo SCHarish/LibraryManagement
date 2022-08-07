@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.harish.library.dto.AuthorRequestDto;
 import com.harish.library.dto.BookRequestDto;
+import com.harish.library.exceptions.InvalidDataException;
 import com.harish.library.model.Author;
 import com.harish.library.model.Book;
 import com.harish.library.model.Tag;
@@ -22,9 +23,11 @@ public class BookStoreUtil {
 
 	}
 
-	public static boolean validateDto(BookRequestDto requestDto) {
+	public static boolean validateBookRequestDto(BookRequestDto requestDto) throws InvalidDataException{
 		// check if author id is null?
-
+		String isbn = requestDto.getIsbn();
+		if(isbn == null || isbn.isBlank() || isbn.isEmpty() || !isValidISBN(isbn))
+			throw new InvalidDataException("Please provide valid ISBN");
 		return true;
 	}
 

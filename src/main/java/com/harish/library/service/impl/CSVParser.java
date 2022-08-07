@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.harish.library.dto.BookRequestDto;
+import com.harish.library.exceptions.InvalidFileException;
 import com.harish.library.service.FileParser;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -23,11 +24,8 @@ import com.opencsv.bean.CsvToBeanBuilder;
 public class CSVParser implements FileParser {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CSVParser.class);
 
-	@Autowired
-	private ModelMapper mapper;
-
 	@Override
-	public List<BookRequestDto> read(MultipartFile file) throws IOException {
+	public List<BookRequestDto> parse(MultipartFile file) throws IOException {
 		List<BookRequestDto> booksInCSV = new ArrayList<BookRequestDto>();
 		// parse CSV file to create a list of `RequestDto` objects
 		try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
@@ -39,8 +37,8 @@ public class CSVParser implements FileParser {
 			// convert `CsvToBean` object to list of users
 			booksInCSV = csvToBean.parse();
 		} catch (Exception ex) {
-			LOGGER.error("Error occurred in file parsing");
-			throw new IOException();
+			LOGGER.error("Error occurred in file parsing - "+ex.getMessage());
+			throw new InvalidFileException("Invalid csv file content :: "+ex.getMessage());
 		}
 		return booksInCSV;
 	}

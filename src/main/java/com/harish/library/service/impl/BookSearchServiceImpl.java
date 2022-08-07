@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.harish.library.exceptions.AuthorNotFoundException;
-import com.harish.library.exceptions.ISBNValueIsNullException;
+import com.harish.library.exceptions.InvalidDataException;
 import com.harish.library.exceptions.NoResultsFoundException;
 import com.harish.library.model.Author;
 import com.harish.library.model.Book;
@@ -42,7 +42,7 @@ public class BookSearchServiceImpl implements IBookSearchService {
 		try {
 			return bookStoreService.findByTitle(title);
 		} catch (IllegalArgumentException ex) {
-			throw new ISBNValueIsNullException("ISBN value is null");
+			throw new InvalidDataException("ISBN value cannot be null");
 		}
 	}
 

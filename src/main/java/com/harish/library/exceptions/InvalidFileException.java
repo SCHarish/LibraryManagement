@@ -1,10 +1,11 @@
 package com.harish.library.exceptions;
 
-public class InvalidISBNException extends Exception {
+public class InvalidFileException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public InvalidISBNException(String message) {
+	public InvalidFileException(String message) {
 		super(message);
 	}
+
 }

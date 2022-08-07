@@ -19,7 +19,8 @@ import com.harish.library.dto.ResponseDto;
 import com.harish.library.exceptions.AuthorNotFoundException;
 import com.harish.library.exceptions.BookNotFoundException;
 import com.harish.library.exceptions.DuplicateBookFoundException;
-import com.harish.library.exceptions.InvalidISBNException;
+import com.harish.library.exceptions.InvalidDataException;
+import com.harish.library.exceptions.InvalidFileException;
 import com.harish.library.exceptions.NoResultsFoundException;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -52,11 +53,19 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 		return new ResponseEntity(response, HttpStatus.NOT_FOUND);
 	}
 
-	@ExceptionHandler(InvalidISBNException.class)
-	public final ResponseEntity<Object> handleInvalidISBN(InvalidISBNException ex, WebRequest request) {
+	@ExceptionHandler(InvalidDataException.class)
+	public final ResponseEntity<Object> handleInvalidData(InvalidDataException ex, WebRequest request) {
 		List<String> details = new ArrayList<>();
 		details.add(ex.getLocalizedMessage());
-		ErrorResponse error = new ErrorResponse("Invalid ISBN", details);
+		ErrorResponse error = new ErrorResponse("Invalid Data", details);
+		return new ResponseEntity(error, HttpStatus.UNPROCESSABLE_ENTITY);
+	}
+	
+	@ExceptionHandler(InvalidFileException.class)
+	public final ResponseEntity<Object> handleInvalidFile(InvalidFileException ex, WebRequest request) {
+		List<String> details = new ArrayList<>();
+		details.add(ex.getLocalizedMessage());
+		ErrorResponse error = new ErrorResponse("Invalid File", details);
 		return new ResponseEntity(error, HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 

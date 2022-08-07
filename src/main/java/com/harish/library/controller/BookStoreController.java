@@ -21,8 +21,7 @@ import com.harish.library.dto.BookRequestDto;
 import com.harish.library.dto.BookRequestDto;
 import com.harish.library.exceptions.BookNotFoundException;
 import com.harish.library.exceptions.DuplicateBookFoundException;
-import com.harish.library.exceptions.ISBNValueIsNullException;
-import com.harish.library.exceptions.InvalidISBNException;
+import com.harish.library.exceptions.InvalidDataException;
 import com.harish.library.exceptions.NoResultsFoundException;
 import com.harish.library.model.Book;
 import com.harish.library.service.IBookStoreService;
@@ -51,8 +50,8 @@ public class BookStoreController {
 
 	@PostMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> addBook(@RequestBody BookRequestDto RequestDto) throws DuplicateBookFoundException {
-		BookStoreUtil.validateDto(RequestDto);
+	public ResponseEntity<Object> addBook(@RequestBody BookRequestDto RequestDto) throws DuplicateBookFoundException, InvalidDataException {
+		BookStoreUtil.validateBookRequestDto(RequestDto);
 		bookStoreService.addBook(RequestDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body("New book added successfully");
 	}
@@ -65,16 +64,16 @@ public class BookStoreController {
 			@ApiResponse(code = 200, message = "OK", response = Book.class, responseContainer = "List") })
 	public ResponseEntity<Optional<Book>> getBook(
 			@ApiParam(value = "isbn", required = true, defaultValue = "") @PathVariable String isbn)
-			throws InvalidISBNException, BookNotFoundException {
+			throws InvalidDataException, BookNotFoundException {
 
 		if (isbn == null || isbn.isEmpty()) {
-			throw new ISBNValueIsNullException("ISBN value cannot be null");
+			throw new InvalidDataException("ISBN value cannot be null");
 		}
 
 		// Validate ISBN
 		boolean isValidISBN = BookStoreUtil.isValidISBN(isbn);
 		if (!isValidISBN) {
-			throw new InvalidISBNException("Please provide valid ISBN");
+			throw new InvalidDataException("Please provide valid ISBN");
 		}
 
 		Optional<Book> book = bookStoreService.findBookByISBN(isbn);
@@ -91,14 +90,14 @@ public class BookStoreController {
 	}
 
 	@PutMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> updateBook(@RequestBody BookRequestDto RequestDto) {
-		BookStoreUtil.validateDto(RequestDto);
+	public ResponseEntity<Object> updateBook(@RequestBody BookRequestDto RequestDto) throws InvalidDataException {
+		BookStoreUtil.validateBookRequestDto(RequestDto);
 		bookStoreService.updateBook(RequestDto);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Book information updated successfully");
 	}
 
 	@DeleteMapping("/books/{isbn}")
-	public ResponseEntity<Object> deleteBook(@PathVariable String isbn) throws InvalidISBNException {
+	public ResponseEntity<Object> deleteBook(@PathVariable String isbn) throws InvalidDataException {
 		if (isbn == null || isbn.isEmpty()) {
 			throw new IllegalArgumentException("Invalid request");
 			// return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request");
@@ -107,7 +106,7 @@ public class BookStoreController {
 		// Validate ISBN
 		boolean isValidISBN = BookStoreUtil.isValidISBN(isbn);
 		if (!isValidISBN) {
-			throw new InvalidISBNException("Please provide valid ISBN");
+			throw new InvalidDataException("Please provide valid ISBN");
 		}
 
 		bookStoreService.deleteBook(isbn);
