@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.harish.library.dto.AuthorRequestDto;
 import com.harish.library.dto.RequestDto;
 import com.harish.library.dto.ResponseDto;
+import com.harish.library.exceptions.AuthorNotFoundException;
 import com.harish.library.exceptions.DuplicateBookFoundException;
 import com.harish.library.model.Author;
 import com.harish.library.model.Book;
@@ -39,7 +40,8 @@ public class AuthorController {
 	
 	@PostMapping(value = "/Authors", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseDto> addAuthor(@RequestBody AuthorRequestDto RequestDto) {	
+	public ResponseEntity<ResponseDto> addAuthor(@RequestBody AuthorRequestDto RequestDto) {
+	//	TODO :: validate Dto
 		Author author = authorStoreService.addAuthor(RequestDto);
 		var responseDto = new ResponseDto.ResponseDtoBuilder("Author created successfully").payload(author).build();
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
@@ -53,9 +55,13 @@ public class AuthorController {
 	
 	@GetMapping(value = "/Authors/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Optional<Author>> getAuthor(@PathVariable Long id) {	
+	public ResponseEntity<Optional<Author>> getAuthor(@PathVariable Long id) throws AuthorNotFoundException{	
 		Optional<Author> author = authorStoreService.getAuthor(id);
-		new ResponseEntity<RequestDto>(HttpStatus.OK);
-		return ResponseEntity.ok(author);
+		if(author.isPresent()) {
+			new ResponseEntity<RequestDto>(HttpStatus.OK);
+			return ResponseEntity.ok(author);
+		} else {
+			throw new AuthorNotFoundException("No author found with the given author id : "+ id);
+		}
 	}
 }

@@ -20,18 +20,18 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "tags")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "books"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "books"})
 public class Tag {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(name = "name", length = 50, nullable = false, unique = true)
+	@Column(name = "name", length = 50, nullable = false)
 	private String name;
 
 	@ElementCollection(targetClass=Book.class)
-	@ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL) 
+	@ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL, fetch = FetchType.LAZY) 
 	private Set<Book> books = new HashSet<Book>();
 
 	public Tag(String name) {

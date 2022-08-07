@@ -1,5 +1,6 @@
 package com.harish.library.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -31,5 +32,10 @@ public class AuthorStoreServiceImpl implements IAuthorStoreService{
 	public Optional<Author> getAuthor(Long id) {
 		Optional<Author> author = authorRepository.findById(id);
 		return author;
+	}
+	
+	public List<Author> getAuthorsByName(String author_name){
+		List<Author> authorList = authorRepository.findAuthorsByName(author_name);
+		return authorList;
 	}
 }

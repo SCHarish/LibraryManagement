@@ -1,19 +1,17 @@
 package com.harish.library.service;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import com.harish.library.model.Book;
 
 public interface IBookSearchService {
-	Optional<List<Book>> searchBookByTitle(String title);
+	Set<Book> searchBooksByTitle(String title);
 	
-	Optional<List<Book>> searchBookByTag(String tag);
-	
-	Optional<List<Book>> searchBookByAuthor(String author);
+	Set<Book> searchBooksByTag(String tag);
 
-	Set<Book> searchBooks(String keyword);
+	Set<Book> searchBooks(String isbn, String title, Long author_id, String tag);
 	
 	Set<Book> searchBooksByAuthorId(Long id);
+	
+	Set<Book> searchBooksByAuthorName(String author_name);
 }

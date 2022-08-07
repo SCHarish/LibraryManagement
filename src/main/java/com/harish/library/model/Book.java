@@ -78,7 +78,7 @@ public class Book {
 	}
 
 	public void setTags(Set<Tag> funnyTag) {
-		//this.tags = funnyTag;
+		this.tags = funnyTag;
 	}
 	
 	public Book() {

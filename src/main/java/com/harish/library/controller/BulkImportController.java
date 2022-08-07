@@ -17,7 +17,7 @@ import io.swagger.annotations.Api;
 
 @RestController
 @RequestMapping("/api/v1")
-@Api(value = "Bulk import Controller", description = "Used to bulk import book entity")
+@Api(value = "Bulk import Controller", description = "Used to bulk import books")
 public class BulkImportController {
 	private final IBulkDataImportService bulkDataImportService;
 	
@@ -26,8 +26,8 @@ public class BulkImportController {
 		this.bulkDataImportService = bulkDataImportService;
 	}
 	
-	@PostMapping(value = "/upload")
-    public ResponseEntity uploadCSV(@RequestParam("sampleCSV") MultipartFile file) throws IOException {
+	@PostMapping(value = "/upload/books")
+    public ResponseEntity uploadBooksFromCSV(@RequestParam("sampleCSV") MultipartFile file) throws IOException {
 		bulkDataImportService.importFromFile(file);
 		return ResponseEntity.status(HttpStatus.CREATED).body("Books imported successfully");
     }

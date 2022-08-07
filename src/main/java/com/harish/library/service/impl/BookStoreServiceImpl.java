@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -52,6 +55,13 @@ public class BookStoreServiceImpl implements IBookStoreService {
 		} catch (IllegalArgumentException ex) {
 			throw new ISBNValueIsNullException("ISBN value is null");
 		}
+	}
+	
+	@Override
+	public Optional<Set<Book>> getAllBooks(){
+		Optional<Iterable<Book>> bookResult = Optional.ofNullable(bookStoreRepository.findAll());
+		Iterable<Book> iterable = bookResult.get();
+		return Optional.of(StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toSet()));
 	}
 
 	@Override
@@ -112,6 +122,18 @@ public class BookStoreServiceImpl implements IBookStoreService {
 			}
 		});
 		bookStoreRepository.saveAll(newBooks);
+	}
+	
+	@Override
+	public Set<Book> searchBooks(String keyword){
+		Set<Book> bookList = bookStoreRepository.searchBooks(keyword);
+		return bookList;
+	}
+	
+	@Override
+	public Set<Book> findByTitle(String title){
+		Set<Book> bookList = bookStoreRepository.findByTitle(title);
+		return bookList;
 	}
 
 	@Override

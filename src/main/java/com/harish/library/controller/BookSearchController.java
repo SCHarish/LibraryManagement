@@ -1,5 +1,6 @@
 package com.harish.library.controller;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.harish.library.dto.RequestDto;
+import com.harish.library.exceptions.AuthorNotFoundException;
+import com.harish.library.exceptions.BookNotFoundException;
+import com.harish.library.exceptions.InvalidDataException;
 import com.harish.library.model.Book;
 import com.harish.library.service.IBookSearchService;
 
@@ -30,34 +34,59 @@ public class BookSearchController {
         this.bookSearchService = bookSearchService;
     }
     
-    @GetMapping("searchBooks")
-    @ApiOperation(value = "searchBookByKeyword", notes="get list of books by keyword")
-    public ResponseEntity<List<Book>> searchBooksByKeyword(@PathVariable String title) {
-    	return ResponseEntity.ok(null);
+    @GetMapping("/search/books")
+    @ApiOperation(value = "searchBooksByAttribute", notes="get list of books by any of the attribute")
+    public ResponseEntity<Set<Book>>searchBooksByAttribute(@RequestParam(required = false) String title, @RequestParam(required = false) String tag, @RequestParam(required = false) String isbn, @RequestParam(required = false) Long author_id) throws AuthorNotFoundException {
+    	Set<Book> bookCollection = new HashSet<Book>();
+    	
+    	if(author_id != null && author_id > 0) {
+    		bookCollection.addAll(bookSearchService.searchBooksByAuthorId(author_id));
+    	}
+    	
+    	if(title != null && !title.isBlank() && !title.isEmpty()) {
+    		bookCollection.addAll(bookSearchService.searchBooksByTitle(title));
+    	}
+    	
+    	if(tag != null && !tag.isBlank() && !tag.isEmpty()) {
+    		bookCollection.addAll(bookSearchService.searchBooksByTag(tag));
+    	}
+    	
+    	if(bookCollection.size() > 0) {
+			new ResponseEntity<RequestDto>(HttpStatus.OK);
+			return ResponseEntity.ok(bookCollection);
+    	} else {
+    		throw new BookNotFoundException("No results found");
+    	}
     }
 	
-    @GetMapping("/searchBooks/title/{title}")
-	public ResponseEntity<List<Book>> searchBooksByTitle(@PathVariable String title) {
-		return ResponseEntity.ok(null);
-	}
-	
-	@GetMapping("/searchBooks/author")
-	@ApiOperation(value = "searchBookByAuthor", notes="get list of books written by an author")
-	public ResponseEntity<Set<Book>> searchBooksByAuthorId(@RequestParam Long id) {
-		Set<Book> bookList = bookSearchService.searchBooksByAuthorId(id);
+    @GetMapping("/title/{title}/books")
+	public ResponseEntity<Set<Book>> searchBooksByTitle(@PathVariable String title) {
+    	Set<Book> bookList = bookSearchService.searchBooksByTitle(title);
 		new ResponseEntity<RequestDto>(HttpStatus.OK);
 		return ResponseEntity.ok(bookList);
 	}
 	
-	@GetMapping("/searchBooks/author/{author}")
-	@ApiOperation(value = "searchBookByAuthor", notes="get list of books written by an author")
-	public ResponseEntity<List<Book>> searchBooksByAuthorName(@PathVariable String author) {			
-		return ResponseEntity.ok(null);
+	@GetMapping("/author/{author_id}/books")
+	@ApiOperation(value = "searchBooksByAuthorId", notes="get list of books written by an author")
+	public ResponseEntity<Set<Book>> searchBooksByAuthorId(@PathVariable Long author_id) {
+		Set<Book> bookList = bookSearchService.searchBooksByAuthorId(author_id);
+		new ResponseEntity<RequestDto>(HttpStatus.OK);
+		return ResponseEntity.ok(bookList);
 	}
 	
-	@GetMapping("/searchBooks/tag/{tag}")
+	@GetMapping("/author/books")
+	@ApiOperation(value = "searchBooksByAuthorName", notes="get list of books written by an author")
+	public ResponseEntity<Set<Book>> searchBooksByAuthorName(@RequestParam String author_name) {			
+		Set<Book> bookList = bookSearchService.searchBooksByAuthorName(author_name);
+		new ResponseEntity<RequestDto>(HttpStatus.OK);
+		return ResponseEntity.ok(bookList);
+	}
+	
+	@GetMapping("/tag/{name}/books")
 	@ApiOperation(value = "searchBookByTag", notes="get list of books based on tag")
-	public ResponseEntity<List<Book>> searchBooksByTag(@PathVariable String tag) {	
-		return ResponseEntity.ok(null);
+	public ResponseEntity<Set<Book>> searchBooksByTag(@PathVariable String name) {
+		Set<Book> bookList = bookSearchService.searchBooksByTag(name);
+		new ResponseEntity<RequestDto>(HttpStatus.OK);
+		return ResponseEntity.ok(bookList);
 	}
 }
