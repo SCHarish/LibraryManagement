@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.harish.library.dto.RequestDto;
+import com.harish.library.dto.BookRequestDto;
 import com.harish.library.service.FileParser;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -27,14 +27,14 @@ public class CSVParser implements FileParser {
 	private ModelMapper mapper;
 
 	@Override
-	public List<RequestDto> read(MultipartFile file) throws IOException {
-		List<RequestDto> booksInCSV = new ArrayList<RequestDto>();
+	public List<BookRequestDto> read(MultipartFile file) throws IOException {
+		List<BookRequestDto> booksInCSV = new ArrayList<BookRequestDto>();
 		// parse CSV file to create a list of `RequestDto` objects
 		try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
 
 			// create csv bean reader
-			CsvToBean<RequestDto> csvToBean = new CsvToBeanBuilder(reader).withSeparator(',').withType(RequestDto.class)
-					.build();
+			CsvToBean<BookRequestDto> csvToBean = new CsvToBeanBuilder(reader).withSeparator(',')
+					.withType(BookRequestDto.class).build();
 
 			// convert `CsvToBean` object to list of users
 			booksInCSV = csvToBean.parse();

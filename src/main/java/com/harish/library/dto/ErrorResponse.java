@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "error")
 public class ErrorResponse {
 	// General error message about nature of error
 	private String message;

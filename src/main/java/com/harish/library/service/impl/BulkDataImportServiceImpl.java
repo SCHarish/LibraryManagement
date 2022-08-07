@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.harish.library.dto.RequestDto;
+import com.harish.library.dto.BookRequestDto;
 import com.harish.library.service.FileParser;
 import com.harish.library.service.IBookStoreService;
 import com.harish.library.service.IBulkDataImportService;
@@ -32,7 +32,7 @@ public class BulkDataImportServiceImpl implements IBulkDataImportService{
 	}
 	
 	public void importFromFile(MultipartFile file) throws IOException {
-		List<RequestDto> requestDtoList = parser.read(file);
+		List<BookRequestDto> requestDtoList = parser.read(file);
 		bookStoreService.addBooks(requestDtoList);
 	}
 }

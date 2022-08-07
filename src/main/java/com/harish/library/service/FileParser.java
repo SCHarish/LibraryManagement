@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.harish.library.dto.RequestDto;
+import com.harish.library.dto.BookRequestDto;
 
 public interface FileParser {
-  public List<RequestDto> read(MultipartFile file) throws IOException; 
+  public List<BookRequestDto> read(MultipartFile file) throws IOException; 
 }

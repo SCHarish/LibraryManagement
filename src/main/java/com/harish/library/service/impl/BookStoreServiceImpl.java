@@ -16,10 +16,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.harish.library.dto.RequestDto;
+import com.harish.library.dto.BookRequestDto;
 import com.harish.library.exceptions.AuthorNotFoundException;
+import com.harish.library.exceptions.BookNotFoundException;
 import com.harish.library.exceptions.DuplicateBookFoundException;
 import com.harish.library.exceptions.ISBNValueIsNullException;
+import com.harish.library.exceptions.NoResultsFoundException;
 import com.harish.library.model.Author;
 import com.harish.library.model.Book;
 import com.harish.library.repository.AuthorRepository;
@@ -37,35 +39,33 @@ public class BookStoreServiceImpl implements IBookStoreService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BookStoreServiceImpl.class);
 	private final BookStoreRepository bookStoreRepository;
-	// private final BookTagRepository bookTagRepository;
+	private final IAuthorStoreService authorStoreService;
 
 	@Autowired
-	private IAuthorStoreService authorStoreService;
-
-	@Autowired
-	public BookStoreServiceImpl(BookStoreRepository bookRepository) {
+	public BookStoreServiceImpl(BookStoreRepository bookRepository, IAuthorStoreService authorStoreService) {
+		this.authorStoreService = authorStoreService;
 		this.bookStoreRepository = bookRepository;
 	}
 
 	@Override
-	public Optional<Book> findByISBN(String isbn) throws ISBNValueIsNullException {
-		try {
-			Optional<Book> book = bookStoreRepository.findById(isbn);
-			return book;
-		} catch (IllegalArgumentException ex) {
-			throw new ISBNValueIsNullException("ISBN value is null");
-		}
-	}
-	
-	@Override
-	public Optional<Set<Book>> getAllBooks(){
-		Optional<Iterable<Book>> bookResult = Optional.ofNullable(bookStoreRepository.findAll());
-		Iterable<Book> iterable = bookResult.get();
-		return Optional.of(StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toSet()));
+	public Optional<Book> findBookByISBN(String isbn) {
+		Optional<Book> book = bookStoreRepository.findById(isbn);
+		return Optional.ofNullable(book.orElseThrow(() -> new BookNotFoundException("No book found with the given ISBN: " + isbn)));
 	}
 
 	@Override
-	public void addBook(RequestDto bookDto) throws DuplicateBookFoundException {
+	public Optional<Set<Book>> getAllBooks() {
+		Optional<Iterable<Book>> bookResult = Optional.ofNullable(bookStoreRepository.findAll());
+		Iterable<Book> iterable = bookResult.get();
+		Optional<Set<Book>> bookList = Optional.of(StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toSet()));
+		if (bookList.get().size() == 0) {
+			throw new NoResultsFoundException("No books found in the library");
+		}
+		return bookList;
+	}
+
+	@Override
+	public void addBook(BookRequestDto bookDto) throws DuplicateBookFoundException {
 		// Check if book is already present
 		Optional<Book> bookInfo = bookStoreRepository.findById(bookDto.getIsbn());
 
@@ -81,7 +81,7 @@ public class BookStoreServiceImpl implements IBookStoreService {
 		if (authorInfo.isPresent()) {
 			List<String> tags = Arrays.asList(bookDto.getTags());
 			List<Tag> newTagList = BookStoreUtil.constructTags(tags);
-			
+
 			// converting dto to domain object
 			Book newBook = BookStoreUtil.constructBook(bookDto, authorInfo.get(), newTagList);
 			bookStoreRepository.save(newBook);
@@ -91,7 +91,7 @@ public class BookStoreServiceImpl implements IBookStoreService {
 	}
 
 	@Override
-	public void updateBook(RequestDto bookDto) {
+	public void updateBook(BookRequestDto bookDto) {
 		// Check Author exist in author table
 		Optional<Author> authorInfo = authorStoreService.getAuthor(bookDto.getAuthorId());
 
@@ -108,7 +108,7 @@ public class BookStoreServiceImpl implements IBookStoreService {
 	}
 
 	@Override
-	public void addBooks(List<RequestDto> requestDtoList) {
+	public void addBooks(List<BookRequestDto> requestDtoList) {
 		List<Book> newBooks = new ArrayList<Book>();
 		requestDtoList.forEach((requestDto) -> {
 			Optional<Author> authorInfo = authorStoreService.getAuthor(requestDto.getAuthorId());
@@ -123,15 +123,15 @@ public class BookStoreServiceImpl implements IBookStoreService {
 		});
 		bookStoreRepository.saveAll(newBooks);
 	}
-	
+
 	@Override
-	public Set<Book> searchBooks(String keyword){
+	public Set<Book> searchBooks(String keyword) {
 		Set<Book> bookList = bookStoreRepository.searchBooks(keyword);
 		return bookList;
 	}
-	
+
 	@Override
-	public Set<Book> findByTitle(String title){
+	public Set<Book> findByTitle(String title) {
 		Set<Book> bookList = bookStoreRepository.findByTitle(title);
 		return bookList;
 	}

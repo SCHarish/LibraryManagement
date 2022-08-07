@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import com.harish.library.dto.RequestDto;
+import com.harish.library.dto.BookRequestDto;
 import com.harish.library.model.Book;
 
 public interface IBookStoreService {
@@ -19,19 +19,19 @@ public interface IBookStoreService {
 	 * @param isbn
 	 * @return
 	 */
-	public Optional<Book> findByISBN(String isbn);
+	public Optional<Book> findBookByISBN(String isbn);
 	
 	/**
 	 * 
 	 * @param bookDto
 	 */
-	public void addBook(RequestDto book);
+	public void addBook(BookRequestDto book);
 	
 	/**
 	 * 
 	 * @param bookDto
 	 */
-	public void updateBook(RequestDto bookDto);
+	public void updateBook(BookRequestDto bookDto);
 	
 	/**
 	 * 
@@ -43,7 +43,7 @@ public interface IBookStoreService {
 	 * 
 	 * @param requestDtoList
 	 */
-	public void addBooks(List<RequestDto> requestDtoList);
+	public void addBooks(List<BookRequestDto> requestDtoList);
 
 	/**
 	 * 

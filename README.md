@@ -3,6 +3,8 @@
 
 # Steps To Run The Application
 <ul>
-<li>In command line, execute ./mvnw clean install</li>
-<li>Now you can run your application. The table “books” will be automatically created in “librarydb”. By default, it runs in port:8080. You can open up the swagger ui from  following url: http://localhost:8080/swagger-ui.html .</li>
+<li>Step 1: In the command line, execute ./mvnw clean install</li>
+<li>Step 2: execute the command java -jar LibraryManagementApp-0.0.1-SNAPSHOT.jar </li>
+<li>Now your application is running. All the tables will be automatically created in “librarydb”. By default, it runs in port:8080. You can open up the swagger ui from  following url: http://localhost:8080/swagger-ui.html .</li>
 </ul>
+

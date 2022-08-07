@@ -121,12 +121,8 @@ public class Book {
 			return this;
 		}
 		
-		public BookBuilder Tags(List<Tag> tagList) {
-			Set<Tag> hSet = new HashSet<Tag>();
-	        for (Tag tag : tagList) {
-	            hSet.add(tag);
-	        }
-			this.tags = hSet;
+		public BookBuilder Tags(Set<Tag> tags) {
+			this.tags = tags;
 			return this;
 		}
 		

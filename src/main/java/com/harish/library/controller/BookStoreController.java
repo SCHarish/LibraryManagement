@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.harish.library.dto.RequestDto;
-import com.harish.library.dto.RequestDto;
+import com.harish.library.dto.BookRequestDto;
+import com.harish.library.dto.BookRequestDto;
 import com.harish.library.exceptions.BookNotFoundException;
 import com.harish.library.exceptions.DuplicateBookFoundException;
 import com.harish.library.exceptions.ISBNValueIsNullException;
 import com.harish.library.exceptions.InvalidISBNException;
+import com.harish.library.exceptions.NoResultsFoundException;
 import com.harish.library.model.Book;
 import com.harish.library.service.IBookStoreService;
 import com.harish.library.util.BookStoreUtil;
@@ -48,15 +49,15 @@ public class BookStoreController {
 		this.bookStoreService = bookStoreService;
 	}
 
-	@PostMapping(value = "/Books", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> addBook(@RequestBody RequestDto RequestDto) throws DuplicateBookFoundException {
+	public ResponseEntity<Object> addBook(@RequestBody BookRequestDto RequestDto) throws DuplicateBookFoundException {
 		BookStoreUtil.validateDto(RequestDto);
 		bookStoreService.addBook(RequestDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body("New book added successfully");
 	}
 
-	@GetMapping("/Books/{isbn}")
+	@GetMapping("/books/{isbn}")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "getBook", nickname = "getBook")
 	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
@@ -76,36 +77,27 @@ public class BookStoreController {
 			throw new InvalidISBNException("Please provide valid ISBN");
 		}
 
-		Optional<Book> book = bookStoreService.findByISBN(isbn);
-
-		if (book.isEmpty()) {
-			throw new BookNotFoundException("Unable to find the book");
-		}
-
-		new ResponseEntity<RequestDto>(HttpStatus.OK);
-		return ResponseEntity.ok(book);
+		Optional<Book> book = bookStoreService.findBookByISBN(isbn);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(book);
 	}
 
-	@GetMapping("/Books")
+	@GetMapping("/books")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "getAllBooks", nickname = "getAllBooks")
-	public ResponseEntity<Optional<Set<Book>>> getAllBooks(){
+	public ResponseEntity<Optional<Set<Book>>> getAllBooks() {
 		Optional<Set<Book>> bookList = bookStoreService.getAllBooks();
-		if(bookList.get().size() == 0)
-			throw new BookNotFoundException("No books found");
-
-		new ResponseEntity<RequestDto>(HttpStatus.OK);
-		return ResponseEntity.ok(bookList);
+		return ResponseEntity.status(HttpStatus.OK).body(bookList);
 	}
 
-	@PutMapping(value = "/Books", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> updateBook(@RequestBody RequestDto RequestDto) {
+	@PutMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> updateBook(@RequestBody BookRequestDto RequestDto) {
 		BookStoreUtil.validateDto(RequestDto);
 		bookStoreService.updateBook(RequestDto);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Book information updated successfully");
 	}
 
-	@DeleteMapping("/Books/{isbn}")
+	@DeleteMapping("/books/{isbn}")
 	public ResponseEntity<Object> deleteBook(@PathVariable String isbn) throws InvalidISBNException {
 		if (isbn == null || isbn.isEmpty()) {
 			throw new IllegalArgumentException("Invalid request");

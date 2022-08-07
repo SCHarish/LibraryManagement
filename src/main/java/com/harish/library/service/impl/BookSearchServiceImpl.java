@@ -25,13 +25,14 @@ import com.harish.library.service.ITagStoreService;
 public class BookSearchServiceImpl implements IBookSearchService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BookSearchServiceImpl.class);
 	final IBookStoreService bookStoreService;
-	
+
 	final IAuthorStoreService authorStoreService;
-	
+
 	final ITagStoreService tagStoreService;
 
 	@Autowired
-	public BookSearchServiceImpl(IBookStoreService bookStoreService, IAuthorStoreService authorStoreService, ITagStoreService tagStoreService) {
+	public BookSearchServiceImpl(IBookStoreService bookStoreService, IAuthorStoreService authorStoreService,
+			ITagStoreService tagStoreService) {
 		this.bookStoreService = bookStoreService;
 		this.authorStoreService = authorStoreService;
 		this.tagStoreService = tagStoreService;
@@ -52,7 +53,6 @@ public class BookSearchServiceImpl implements IBookSearchService {
 		return bookList;
 	}
 
-
 	@Override
 	public Set<Book> searchBooks(String isbn, String title, Long author_id, String tag) {
 		Set<Book> bookCollection = new HashSet<Book>();
@@ -61,26 +61,26 @@ public class BookSearchServiceImpl implements IBookSearchService {
 //		} else {
 //			throw new NoResultsFoundException("Invalid keyword");
 //		}
-		if(author_id != null) {
+		if (author_id != null) {
 			Set<Book> books = searchBooksByAuthorId(author_id);
-			
+
 		}
 		return bookCollection;
 	}
-	
+
 	@Override
-	public Set<Book> searchBooksByAuthorId(Long id){
+	public Set<Book> searchBooksByAuthorId(Long id) {
 		Optional<Author> author = authorStoreService.getAuthor(id);
-		if(author.isPresent()) {
+		if (author.isPresent()) {
 			Set<Book> bookList = author.get().getBooks();
 			return bookList;
 		} else {
-			throw new AuthorNotFoundException("Author not found with the author id : " +id);
+			throw new AuthorNotFoundException("Author not found with the author id : " + id);
 		}
 	}
-	
+
 	@Override
-	public Set<Book> searchBooksByAuthorName(String author_name){
+	public Set<Book> searchBooksByAuthorName(String author_name) {
 		List<Author> authorList = authorStoreService.getAuthorsByName(author_name);
 		Set<Book> bookList = new HashSet<Book>();
 		authorList.forEach(author -> bookList.addAll(author.getBooks()));
