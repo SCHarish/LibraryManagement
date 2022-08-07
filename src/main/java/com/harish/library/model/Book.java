@@ -67,7 +67,7 @@ public class Book {
 
 	// A book can have many tags and vice-versa
 	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "book_tags", joinColumns = @JoinColumn(name = "book_isbn"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
+	@JoinTable(name = "book_tags", joinColumns = @JoinColumn(name = "book_isbn"), inverseJoinColumns = @JoinColumn(name = "tag_name"))
 	public Set<Tag> getTags() {
 		return tags;
 	}

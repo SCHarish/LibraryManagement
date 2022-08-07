@@ -54,21 +54,6 @@ public class BookSearchServiceImpl implements IBookSearchService {
 	}
 
 	@Override
-	public Set<Book> searchBooks(String isbn, String title, Long author_id, String tag) {
-		Set<Book> bookCollection = new HashSet<Book>();
-//		if (keyword != null && !keyword.isEmpty() && !keyword.isBlank()) {
-//			return bookStoreService.searchBooks(keyword);
-//		} else {
-//			throw new NoResultsFoundException("Invalid keyword");
-//		}
-		if (author_id != null) {
-			Set<Book> books = searchBooksByAuthorId(author_id);
-
-		}
-		return bookCollection;
-	}
-
-	@Override
 	public Set<Book> searchBooksByAuthorId(Long id) {
 		Optional<Author> author = authorStoreService.getAuthor(id);
 		if (author.isPresent()) {

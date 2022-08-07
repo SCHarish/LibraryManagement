@@ -24,26 +24,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Tag {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-
 	@Column(name = "name", length = 50, nullable = false)
 	private String name;
 
 	@ElementCollection(targetClass=Book.class)
-	@ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL, fetch = FetchType.EAGER) 
+	@ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL, fetch = FetchType.LAZY) 
 	private Set<Book> books = new HashSet<Book>();
 
 	public Tag(String name) {
 		this.name = name;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -69,7 +58,6 @@ public class Tag {
 
 	public Tag(Long id, String name, Set<Book> books) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.books = books;
 	}
