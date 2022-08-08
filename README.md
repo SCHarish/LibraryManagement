@@ -45,3 +45,8 @@
 * You can also use this postman collection to test the API https://www.postman.com/collections/89e1500bb70a8baa0694
 
 * For the Bulk import API, use the <b>sample.csv</b> added to this repository.
+
+---
+### Note
+
+<p>Before adding the Book entity, Author entity needs to be added. Because, Book entity requires an Author entity. Book entity has 1:N relationship with Author.</p>
