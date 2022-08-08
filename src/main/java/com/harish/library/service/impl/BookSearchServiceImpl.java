@@ -42,7 +42,7 @@ public class BookSearchServiceImpl implements IBookSearchService {
 	public Set<Book> searchBooksByTitle(String title) {
 		Set<Book> bookList =  bookStoreService.findByTitle(title);
 		if(bookList.size() == 0) {
-			throw new NoResultsFoundException("No books found with the given title");
+			throw new NoResultsFoundException("No books found with the given title : "+title);
 		}
 		return bookList;
 	}
@@ -53,7 +53,7 @@ public class BookSearchServiceImpl implements IBookSearchService {
 		Set<Book> bookList = new HashSet<Book>();
 		tagList.forEach(tag -> bookList.addAll(tag.getBooks()));
 		if(bookList.size() == 0) {
-			throw new NoResultsFoundException("No books found with the given tag");
+			throw new NoResultsFoundException("No books found with the given tag : "+name);
 		}
 		return bookList;
 	}
@@ -78,7 +78,7 @@ public class BookSearchServiceImpl implements IBookSearchService {
 		Set<Book> bookList = new HashSet<Book>();
 		authorList.forEach(author -> bookList.addAll(author.getBooks()));
 		if(bookList.size() == 0) {
-			throw new NoResultsFoundException("No books found with the given author name");
+			throw new NoResultsFoundException("No books found with the given author name : "+author_name);
 		}
 		return bookList;
 	}

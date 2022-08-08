@@ -18,7 +18,7 @@ import io.swagger.annotations.Api;
 
 @RestController
 @RequestMapping("/api/v1")
-@Api(value = "Bulk import Controller", description = "Used to bulk import books")
+@Api(value = "Bulk import API", description = "Bulk import API")
 public class BulkImportController {
 	private final IBulkDataImportService bulkDataImportService;
 	

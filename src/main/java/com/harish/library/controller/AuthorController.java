@@ -29,7 +29,7 @@ import io.swagger.annotations.Api;
 
 @RestController
 @RequestMapping("/api/v1")
-@Api(value = "Author Store Controller", description = "CRUD endpoints for author entity")
+@Api(value = "CRUD API for Author", description = "CRUD API for Author")
 public class AuthorController {
 	private final IAuthorStoreService authorStoreService;
 	
@@ -48,11 +48,11 @@ public class AuthorController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
 	
-	@GetMapping(value = "/authors")
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> getAllAuthors() {	
-		return null;
-	}
+//	@GetMapping(value = "/authors")
+//	@ResponseStatus(HttpStatus.CREATED)
+//	public ResponseEntity<Object> getAllAuthors() {	
+//		return null;
+//	}
 	
 	@GetMapping(value = "/authors/{id}")
 	@ResponseStatus(HttpStatus.CREATED)

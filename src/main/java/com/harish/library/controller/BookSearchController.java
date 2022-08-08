@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,10 +27,11 @@ import com.harish.library.service.impl.BookSearchServiceImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/api/v1")
-@Api(value = "Search Controller")
+@Api(value = "Book search API", description = "Book search API")
 public class BookSearchController {
 	private final IBookSearchService bookSearchService;
 	private static final Logger LOGGER = LoggerFactory.getLogger(BookSearchController.class);
@@ -39,7 +41,7 @@ public class BookSearchController {
 		this.bookSearchService = bookSearchService;
 	}
 
-	@GetMapping("/search/books")
+	@GetMapping(value = "/search/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "searchBooksByAttribute", response = Iterable.class, notes = "Get list of books by any of the attributes")
 	public ResponseEntity<Set<Book>> searchBooksByAttribute(@RequestParam(required = false) String title,
 			@RequestParam(required = false) String tag, @RequestParam(required = false) String isbn,
@@ -80,17 +82,17 @@ public class BookSearchController {
 		}
 	}
 
-	@GetMapping("/title/{title}/books")
-	@ApiOperation(value = "searchBooksByTitle", response = Iterable.class, tags = "Get list of books by title")
-	public ResponseEntity<Set<Book>> searchBooksByTitle(@PathVariable String title) {
+	@GetMapping(value = "/title/{title}/books", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "searchBooksByTitle", response = Iterable.class)
+	public ResponseEntity<Set<Book>> searchBooksByTitle(@ApiParam(name="title", value ="Book title", example="Harry Potter", required = true)@PathVariable String title) {
 		Set<Book> bookList = bookSearchService.searchBooksByTitle(title);
 		new ResponseEntity<BookRequestDto>(HttpStatus.OK);
 		return ResponseEntity.ok(bookList);
 	}
 
-	@GetMapping("/author/{author_id}/books")
+	@GetMapping(value = "/author/{author_id}/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "searchBooksByAuthorId", response = Iterable.class, notes = "Get list of books written by an author")
-	public ResponseEntity<Set<Book>> searchBooksByAuthorId(@PathVariable Long author_id) {
+	public ResponseEntity<Set<Book>> searchBooksByAuthorId(@ApiParam(name="author_id", value ="Author ID", example="123", required = true)@PathVariable Long author_id) {
 		Set<Book> bookList = bookSearchService.searchBooksByAuthorId(author_id);
 		if (bookList.size() == 0) {
 			throw new NoResultsFoundException("No books found with the given author id");
@@ -99,9 +101,9 @@ public class BookSearchController {
 		return ResponseEntity.ok(bookList);
 	}
 
-	@GetMapping("/author/books")
+	@GetMapping(value = "/author/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "searchBooksByAuthorName", response = Iterable.class, notes = "Get list of books written by an author")
-	public ResponseEntity<Set<Book>> searchBooksByAuthorName(@RequestParam String author_name) {
+	public ResponseEntity<Set<Book>> searchBooksByAuthorName(@ApiParam(name="author_name", value="Author Name", example="Harish", required = true)@RequestParam String author_name) {
 		Set<Book> bookList = bookSearchService.searchBooksByAuthorName(author_name);
 		if (bookList.size() == 0) {
 			throw new NoResultsFoundException("No books found with the given author name");
@@ -110,9 +112,9 @@ public class BookSearchController {
 		return ResponseEntity.ok(bookList);
 	}
 
-	@GetMapping("/tag/{name}/books")
+	@GetMapping(value = "/tag/{name}/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "searchBooksByTag", response = Iterable.class, notes = "Get list of books based on tag name")
-	public ResponseEntity<Set<Book>> searchBooksByTag(@PathVariable String name) {
+	public ResponseEntity<Set<Book>> searchBooksByTag(@ApiParam(name="name", value="Tag Name", example="fiction", required = true)@PathVariable String name) {
 		Set<Book> bookList = bookSearchService.searchBooksByTag(name);
 		if (bookList.size() == 0) {
 			throw new NoResultsFoundException("No books found with given tag name");

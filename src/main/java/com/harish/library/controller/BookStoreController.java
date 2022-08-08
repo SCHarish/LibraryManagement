@@ -40,7 +40,7 @@ import io.swagger.annotations.ApiParam;
  */
 @RestController
 @RequestMapping("/api/v1")
-@Api(value = "Book Store Controller", description = "CRUD endpoints for book entity")
+@Api(value = "Book store API", description = "CRUD API for Book")
 public class BookStoreController {
 	private final IBookStoreService bookStoreService;
 
@@ -49,7 +49,7 @@ public class BookStoreController {
 		this.bookStoreService = bookStoreService;
 	}
 
-	@PostMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Object> addBook(@RequestBody BookRequestDto RequestDto)
 			throws DuplicateBookFoundException, InvalidDataException {
@@ -75,7 +75,7 @@ public class BookStoreController {
 		return ResponseEntity.status(HttpStatus.OK).body(book);
 	}
 
-	@GetMapping("/books")
+	@GetMapping(value = "/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "getAllBooks", nickname = "getAllBooks")
 	public ResponseEntity<Optional<Set<Book>>> getAllBooks() {
@@ -83,7 +83,7 @@ public class BookStoreController {
 		return ResponseEntity.status(HttpStatus.OK).body(bookList);
 	}
 
-	@PutMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> updateBook(@RequestBody BookRequestDto RequestDto) throws InvalidDataException {
 		BookStoreUtil.validateBookRequestDto(RequestDto);
 		Book updatedBook = bookStoreService.updateBook(RequestDto);
@@ -92,7 +92,7 @@ public class BookStoreController {
 		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
 	}
 
-	@DeleteMapping("/books/{isbn}")
+	@DeleteMapping(value = "/books/{isbn}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> deleteBook(@PathVariable String isbn) throws InvalidDataException, BookNotFoundException {
 		BookStoreUtil.isValidISBN(isbn);
 		bookStoreService.deleteBook(isbn);
