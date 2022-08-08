@@ -69,7 +69,7 @@ public class BookStoreServiceImpl implements IBookStoreService {
 		Optional<Book> bookInfo = bookStoreRepository.findById(bookDto.getIsbn());
 
 		bookInfo.ifPresent(book -> {
-			throw new DuplicateBookFoundException("Book with same isbn is already present");
+			throw new DuplicateBookFoundException("Book with the isbn : "+bookDto.getIsbn() + " is already present");
 		});
 
 		LOGGER.info("No duplicate book found");
@@ -85,7 +85,7 @@ public class BookStoreServiceImpl implements IBookStoreService {
 			Book newBook = BookStoreUtil.constructBook(bookDto, authorInfo.get(), newTagList);
 			return bookStoreRepository.save(newBook);
 		} else {
-			throw new AuthorNotFoundException("Author not found exception");
+			throw new AuthorNotFoundException("No author found with the given author id : "+bookDto.getAuthorId());
 		}
 	}
 

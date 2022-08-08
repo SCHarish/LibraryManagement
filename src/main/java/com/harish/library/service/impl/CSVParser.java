@@ -27,14 +27,14 @@ public class CSVParser implements FileParser {
 	@Override
 	public List<BookRequestDto> parse(MultipartFile file) throws IOException {
 		List<BookRequestDto> booksInCSV = new ArrayList<BookRequestDto>();
-		// parse CSV file to create a list of `RequestDto` objects
+		// parse CSV file to create a list of `BookRequestDto` objects
 		try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
 
 			// create csv bean reader
 			CsvToBean<BookRequestDto> csvToBean = new CsvToBeanBuilder(reader).withSeparator(',')
 					.withType(BookRequestDto.class).build();
 
-			// convert `CsvToBean` object to list of users
+			// convert `CsvToBean` object to list of books
 			booksInCSV = csvToBean.parse();
 		} catch (Exception ex) {
 			LOGGER.error("Error occurred in file parsing - "+ex.getMessage());

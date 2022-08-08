@@ -1,6 +1,5 @@
 package com.harish.library.controller.test;
 
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -63,7 +62,8 @@ public class BookStoreControllerTest {
 		BookRequestDto bookRequestDto = new BookRequestDto.BookRequestDtoBuilder().isbn(isbn).author(author_id)
 				.title("Harry potter").tags(new String[] { "fiction" }).build();
 
-		doNothing().when(bookStoreService).addBook(bookRequestDto);
+		var book = mock(Book.class);
+		when(bookStoreService.addBook(bookRequestDto)).thenReturn(book);
 
 		// Act and Assert
 		mockMvc.perform(

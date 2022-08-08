@@ -5,13 +5,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.assertj.core.util.Arrays;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -23,7 +20,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 
 import com.harish.library.dto.BookRequestDto;
+import com.harish.library.exceptions.AuthorNotFoundException;
 import com.harish.library.exceptions.BookNotFoundException;
+import com.harish.library.exceptions.DuplicateBookFoundException;
 import com.harish.library.exceptions.NoResultsFoundException;
 import com.harish.library.model.Author;
 import com.harish.library.model.Book;
@@ -32,7 +31,7 @@ import com.harish.library.repository.BookStoreRepository;
 import com.harish.library.service.IAuthorStoreService;
 import com.harish.library.service.impl.BookStoreServiceImpl;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class BookStoreServiceImplTest {
 
 	private final String isbn = "121-3-66-248511-3";
@@ -72,6 +71,36 @@ public class BookStoreServiceImplTest {
 
 		// Then
 		verify(bookStoreRepository).save(Mockito.any(Book.class));
+	}
+
+	@Test
+	public void testAddNewBook_Given_ISBNIsPresent_Then_ThrowsDuplicateBookFoundException() {
+		thrown.expect(DuplicateBookFoundException.class);
+		thrown.expectMessage("Book with the isbn : "+isbn+" is already present");
+
+		// Given
+		BookRequestDto requestDto = mock(BookRequestDto.class);
+		Book book = mock(Book.class);
+		when(requestDto.getIsbn()).thenReturn(isbn);
+		when(bookStoreRepository.findById(isbn)).thenReturn(Optional.ofNullable(book));
+
+		// When
+		bookStoreService.addBook(requestDto);
+	}
+	
+	@Test
+	public void testAddNewBook_Given_AuthorIdIsNotPresent_Then_AuthorNotFoundException() {
+		thrown.expect(AuthorNotFoundException.class);
+		thrown.expectMessage("No author found with the given author id : 123");
+
+		// Given
+		BookRequestDto requestDto = mock(BookRequestDto.class);
+		when(requestDto.getIsbn()).thenReturn(isbn);
+		when(requestDto.getAuthorId()).thenReturn(123L);
+		when(authorStoreService.getAuthor(author_id)).thenReturn(Optional.empty());
+		
+		// When
+		bookStoreService.addBook(requestDto);
 	}
 
 	@Test
