@@ -61,11 +61,10 @@ public class BookStoreServiceImpl implements IBookStoreService {
 	}
 
 	@Override
-	public Optional<Set<Book>> getAllBooks() {
-		Optional<Iterable<Book>> bookResult = Optional.ofNullable(bookStoreRepository.findAll());
-		Iterable<Book> iterable = bookResult.get();
-		Optional<Set<Book>> bookList = Optional.of(StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toSet()));
-		if (bookList.get().size() == 0) {
+	public Set<Book> getAllBooks() {
+		Iterable<Book> bookResult = bookStoreRepository.findAll();
+		Set<Book> bookList = StreamSupport.stream(bookResult.spliterator(), false).collect(Collectors.toSet());
+		if (bookList.size() == 0) {
 			throw new NoResultsFoundException("No books found in the library");
 		}
 		return bookList;

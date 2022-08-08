@@ -13,7 +13,7 @@ public interface IBookStoreService {
 	 * 
 	 * @return
 	 */
-	public Optional<Set<Book>> getAllBooks();
+	public Set<Book> getAllBooks();
 	/**
 	 * 
 	 * @param isbn

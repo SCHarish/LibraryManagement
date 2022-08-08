@@ -1,5 +1,6 @@
 package com.harish.library.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.harish.library.dto.BookRequestDto;
 import com.harish.library.dto.ResponseDto;
 import com.harish.library.exceptions.AuthorNotFoundException;
 import com.harish.library.exceptions.DuplicateBookFoundException;
+import com.harish.library.exceptions.NoResultsFoundException;
 import com.harish.library.model.Author;
 import com.harish.library.model.Book;
 import com.harish.library.service.IAuthorStoreService;
@@ -26,6 +28,7 @@ import com.harish.library.service.IBookStoreService;
 import com.harish.library.util.BookStoreUtil;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 /**
@@ -46,7 +49,8 @@ public class AuthorController {
 	
 	@PostMapping(value = "/authors", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseDto> addAuthor(@RequestBody AuthorRequestDto requestDto) {
+	@ApiOperation(value = "addAuthor", nickname = "addAuthor")
+	public ResponseEntity<ResponseDto> addAuthor(@ApiParam(value = "Author DTO", required = true) @RequestBody AuthorRequestDto requestDto) {
 		//Validate author request DTO
 		BookStoreUtil.validateAuthorRequestDto(requestDto);
 		Author author = authorStoreService.addAuthor(requestDto);
@@ -54,14 +58,18 @@ public class AuthorController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
 	
-//	@GetMapping(value = "/authors")
-//	@ResponseStatus(HttpStatus.CREATED)
-//	public ResponseEntity<Object> getAllAuthors() {	
-//		return null;
-//	}
+	@GetMapping(value = "/authors", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.CREATED)
+	@ApiOperation(value = "getAllAuthors", nickname = "getAllAuthors")
+	public ResponseEntity<ResponseDto> getAllAuthors() throws NoResultsFoundException{	
+		List<Author> authorList = authorStoreService.getAllAuthors();
+		var responseDto = new ResponseDto.ResponseDtoBuilder("Author created successfully").payload(authorList).build();
+		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+	}
 	
 	@GetMapping(value = "/authors/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
+	@ApiOperation(value = "getAuthor", nickname = "getAuthor")
 	public ResponseEntity<Optional<Author>> getAuthor(@ApiParam(name="id", value ="Author ID", required = true) @PathVariable Long id) throws AuthorNotFoundException{	
 		Optional<Author> author = authorStoreService.getAuthor(id);
 		if(author.isPresent()) {

@@ -52,6 +52,7 @@ public class BookStoreController {
 
 	@PostMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
+	@ApiOperation(value = "addBook", nickname = "addBook")
 	public ResponseEntity<Object> addBook(@ApiParam(name="RequestDto", value="Book request DTO", required=true)@RequestBody BookRequestDto RequestDto)
 			throws DuplicateBookFoundException, InvalidDataException {
 		BookStoreUtil.validateBookRequestDto(RequestDto);
@@ -79,8 +80,8 @@ public class BookStoreController {
 	@GetMapping(value = "/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "getAllBooks", nickname = "getAllBooks")
-	public ResponseEntity<Optional<Set<Book>>> getAllBooks() {
-		Optional<Set<Book>> bookList = bookStoreService.getAllBooks();
+	public ResponseEntity<Set<Book>> getAllBooks() {
+		Set<Book> bookList = bookStoreService.getAllBooks();
 		return ResponseEntity.status(HttpStatus.OK).body(bookList);
 	}
 

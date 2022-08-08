@@ -103,9 +103,9 @@ public class BookSearchController {
 		return ResponseEntity.ok(bookList);
 	}
 
-	@GetMapping(value = "/author/{author_id}/books", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/author/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "searchBooksByAuthorId", response = Iterable.class, notes = "Get list of books written by an author")
-	public ResponseEntity<Set<Book>> searchBooksByAuthorId(@ApiParam(name="author_id", value ="Author ID", example="123", required = true)@PathVariable Long author_id) {
+	public ResponseEntity<Set<Book>> searchBooksByAuthorId(@ApiParam(name="author_id", value ="Author ID", example="123", required = true)@RequestParam Long author_id) {
 		Set<Book> bookList = bookSearchService.searchBooksByAuthorId(author_id);
 		if (bookList.size() == 0) {
 			throw new NoResultsFoundException("No books found with the given author id");
@@ -114,9 +114,9 @@ public class BookSearchController {
 		return ResponseEntity.ok(bookList);
 	}
 
-	@GetMapping(value = "/author/books", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/author/{author_name}/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "searchBooksByAuthorName", response = Iterable.class, notes = "Get list of books written by an author")
-	public ResponseEntity<Set<Book>> searchBooksByAuthorName(@ApiParam(name="author_name", value="Author Name", example="Harish", required = true)@RequestParam String author_name) {
+	public ResponseEntity<Set<Book>> searchBooksByAuthorName(@ApiParam(name="author_name", value="Author Name", example="Harish", required = true)@PathVariable String author_name) {
 		Set<Book> bookList = bookSearchService.searchBooksByAuthorName(author_name);
 		if (bookList.size() == 0) {
 			throw new NoResultsFoundException("No books found with the given author name");

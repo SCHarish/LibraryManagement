@@ -12,4 +12,6 @@ public interface IAuthorStoreService {
 	Optional<Author> getAuthor(Long id);
 	
 	List<Author> getAuthorsByName(String author_name);
+	
+	List<Author> getAllAuthors();
 }
