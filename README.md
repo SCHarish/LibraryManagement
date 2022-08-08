@@ -1,7 +1,7 @@
 ## LibraryManagement
 ---
 ### About
-* This is a simple library management application built using spring boot. There are three entities Book, Author and Tags.
+<p>This is a simple library management application built using spring boot. There are three entities Book, Author and Tags.</p>
 ---
 ### Tools
 
@@ -23,9 +23,9 @@
 ---
 ## Steps To Run The Application
 
-* In the command line, execute <b>./mvnw clean install</b>  in the linux machine or Mac</li>
+* In the command line, execute <b>./mvnw clean install</b>  in the linux machine or Mac
   <img src="https://user-images.githubusercontent.com/25337840/183427384-5accdd43-2535-4e25-801a-c1aed74519ec.png"/>
-* Execute the command java -jar LibraryManagementApp-0.0.1-SNAPSHOT.jar </li>
+* Execute the command <b>java -jar LibraryManagementApp-0.0.1-SNAPSHOT.jar</b>
 * Now the application is running. All the tables will be automatically created in “librarydb”. By default, it runs in port:8080. You can open up the    swagger ui from  following url: http://localhost:8080/swagger-ui.html
 * You can also use the postman collection to test the API
 * For import API, use the <b>sample.csv</b> added in this repository.
