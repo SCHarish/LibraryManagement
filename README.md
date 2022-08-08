@@ -27,7 +27,7 @@
 ---
 ## Steps To Run The Application
 
-* In the command line, execute <b>./mvnw clean install</b>  in the linux machine or Mac
+* In the command line, execute <b>./mvnw clean install</b>  in the linux machine or Mac. For windows, execute the command <b>mvn clean install</b>
 
   <img src="https://user-images.githubusercontent.com/25337840/183427384-5accdd43-2535-4e25-801a-c1aed74519ec.png"/>
   
@@ -42,6 +42,6 @@
 * You can view the tables by accessing the URL [http://locahost:8082](http://localhost:8080/h2-console/) Use the username as "sa" and password as "password" to connect.
 <img width="814" alt="image" src="https://user-images.githubusercontent.com/25337840/183438806-d35b88e8-a549-43dd-9c78-83cddb5bb2b4.png">
 
-* You can also use the postman collection to test the API https://www.postman.com/collections/89e1500bb70a8baa0694
+* You can also use this postman collection to test the API https://www.postman.com/collections/89e1500bb70a8baa0694
 
 * For the Bulk import API, use the <b>sample.csv</b> added to this repository.
