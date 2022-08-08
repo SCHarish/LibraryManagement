@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiResponses;
  */
 @RestController
 @RequestMapping("/api/v1")
-@Api(value = "Book search API", description = "Book search API")
+@Api(value = "Book search API", tags = "Search", description = "Search Books")
 public class BookSearchController {
 	private final IBookSearchService bookSearchService;
 	private static final Logger LOGGER = LoggerFactory.getLogger(BookSearchController.class);

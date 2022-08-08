@@ -30,7 +30,7 @@ import io.swagger.annotations.ApiResponses;
  */
 @RestController
 @RequestMapping("/api/v1")
-@Api(value = "Bulk import API", description = "Bulk import API")
+@Api(value = "Import API", tags="Book Import", description = "Import API")
 public class BulkImportController {
 	private final IBulkDataImportService bulkDataImportService;
 

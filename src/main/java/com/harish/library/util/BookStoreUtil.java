@@ -1,6 +1,7 @@
 package com.harish.library.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,6 +50,14 @@ public class BookStoreUtil {
 		if (!isValidISBN(isbn)) {
 			throw new InvalidDataException("Please provide valid ISBN");
 		}
+		
+		Set<String> tags = new HashSet<String>();
+		String[] tags_provided = requestDto.getTags();
+		for(String tag : tags_provided) {
+			tags.add(tag);
+		}
+		String[] new_tags = tags.stream().toArray(String[]::new);
+		requestDto.setTags(new_tags);
 		return true;
 	}
 

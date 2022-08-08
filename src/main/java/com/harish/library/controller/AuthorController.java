@@ -40,7 +40,7 @@ import io.swagger.annotations.ApiResponses;
  */
 @RestController
 @RequestMapping("/api/v1")
-@Api(value = "CRUD API for Author", description = "CRUD API for Author")
+@Api(value = "CRUD API for Author", tags = "Author", description = "Manage Authors")
 public class AuthorController {
 	private final IAuthorStoreService authorStoreService;
 

@@ -43,7 +43,7 @@ import io.swagger.annotations.ApiParam;
  */
 @RestController
 @RequestMapping("/api/v1")
-@Api(value = "Book store API", description = "CRUD API for Book")
+@Api(value = "CRUD API for Book",  tags = "Book", description = "Manage Books" )
 public class BookStoreController {
 	private final IBookStoreService bookStoreService;
 
