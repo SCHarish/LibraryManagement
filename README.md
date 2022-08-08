@@ -49,4 +49,4 @@
 ---
 ### Note
 
-<p>Before adding the Book entity, Author entity needs to be added. Because, Book entity requires an Author entity. Book entity has 1:N relationship with Author.</p>
+<p>Before adding the Book entity, Author entity needs to be added. Because, Book entity requires an Author entity(author id). Book entity has 1:N relationship with Author.</p>
