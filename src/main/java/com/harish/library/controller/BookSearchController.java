@@ -65,9 +65,6 @@ public class BookSearchController {
 	@GetMapping("/title/{title}/books")
 	public ResponseEntity<Set<Book>> searchBooksByTitle(@PathVariable String title) {
 		Set<Book> bookList = bookSearchService.searchBooksByTitle(title);
-		if(bookList.size() == 0) {
-			throw new NoResultsFoundException("No books found found with the given title");
-		}
 		new ResponseEntity<BookRequestDto>(HttpStatus.OK);
 		return ResponseEntity.ok(bookList);
 	}

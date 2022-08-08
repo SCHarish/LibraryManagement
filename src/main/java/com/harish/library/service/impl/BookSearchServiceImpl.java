@@ -38,30 +38,37 @@ public class BookSearchServiceImpl implements IBookSearchService {
 		this.tagStoreService = tagStoreService;
 	}
 
+	@Override
 	public Set<Book> searchBooksByTitle(String title) {
-		try {
-			return bookStoreService.findByTitle(title);
-		} catch (IllegalArgumentException ex) {
-			throw new InvalidDataException("ISBN value cannot be null");
+		Set<Book> bookList =  bookStoreService.findByTitle(title);
+		if(bookList.size() == 0) {
+			throw new NoResultsFoundException("No books found with the given title");
 		}
-	}
-
-	public Set<Book> searchBooksByTag(String name) {
-		Set<Tag> tagList = tagStoreService.getTagsByName(name);
-		List<String> list = tagStoreService.findISBNByTagName(name);
-		Set<Book> bookList = new HashSet<Book>();
-		tagList.forEach(tag -> bookList.addAll(tag.getBooks()));
 		return bookList;
 	}
 
 	@Override
-	public Set<Book> searchBooksByAuthorId(Long id) {
-		Optional<Author> author = authorStoreService.getAuthor(id);
+	public Set<Book> searchBooksByTag(String name) {
+		Set<Tag> tagList = tagStoreService.getTagsByName(name);
+		Set<Book> bookList = new HashSet<Book>();
+		tagList.forEach(tag -> bookList.addAll(tag.getBooks()));
+		if(bookList.size() == 0) {
+			throw new NoResultsFoundException("No books found with the given tag");
+		}
+		return bookList;
+	}
+
+	@Override
+	public Set<Book> searchBooksByAuthorId(Long author_id) {
+		Optional<Author> author = authorStoreService.getAuthor(author_id);
 		if (author.isPresent()) {
 			Set<Book> bookList = author.get().getBooks();
+			if(bookList.size() == 0) {
+				throw new NoResultsFoundException("No books found for the given author id - "+author_id);
+			}
 			return bookList;
 		} else {
-			throw new AuthorNotFoundException("Author not found with the author id : " + id);
+			throw new AuthorNotFoundException("No author found with the given author id : "+author_id);
 		}
 	}
 
@@ -70,6 +77,9 @@ public class BookSearchServiceImpl implements IBookSearchService {
 		List<Author> authorList = authorStoreService.getAuthorsByName(author_name);
 		Set<Book> bookList = new HashSet<Book>();
 		authorList.forEach(author -> bookList.addAll(author.getBooks()));
+		if(bookList.size() == 0) {
+			throw new NoResultsFoundException("No books found with the given author name");
+		}
 		return bookList;
 	}
 }

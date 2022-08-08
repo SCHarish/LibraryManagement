@@ -81,7 +81,6 @@ public class BookStoreControllerTest {
         var tags = new HashSet<Tag>();
         var book = new Book.BookBuilder(isbn, "Harry Potter").
         		Author(author).Tags(tags).build();
-        		
         when(bookStoreService.findBookByISBN(isbn)).thenReturn(Optional.of(book));
 
         //Act and Assert
