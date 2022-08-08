@@ -28,7 +28,7 @@ public class BulkImportController {
 	}
 	
 	@PostMapping(value = "/upload/books")
-    public ResponseEntity<Object> uploadBooksFromCSV(@RequestParam("sampleCSV") MultipartFile file) throws IOException {
+    public ResponseEntity<Object> uploadBooksFromCSV(@RequestParam("csvfile") MultipartFile file) throws IOException {
 		bulkDataImportService.importFromFile(file);
 		var responseDto = new ResponseDto.ResponseDtoBuilder("Books imported successfully from CSV").build();
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);

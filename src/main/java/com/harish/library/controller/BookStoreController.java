@@ -87,15 +87,17 @@ public class BookStoreController {
 	public ResponseEntity<Object> updateBook(@RequestBody BookRequestDto RequestDto) throws InvalidDataException {
 		BookStoreUtil.validateBookRequestDto(RequestDto);
 		Book updatedBook = bookStoreService.updateBook(RequestDto);
-		var responseDto = new ResponseDto.ResponseDtoBuilder("Book information updated successfully").payload(updatedBook).build();
+		var responseDto = new ResponseDto.ResponseDtoBuilder("Book information updated successfully")
+				.payload(updatedBook).build();
 		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
 	}
 
 	@DeleteMapping("/books/{isbn}")
-	public ResponseEntity<Object> deleteBook(@PathVariable String isbn) throws InvalidDataException {
+	public ResponseEntity<Object> deleteBook(@PathVariable String isbn) throws InvalidDataException, BookNotFoundException {
 		BookStoreUtil.isValidISBN(isbn);
 		bookStoreService.deleteBook(isbn);
 		var responseDto = new ResponseDto.ResponseDtoBuilder("Book information deleted successfully").build();
 		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+
 	}
 }

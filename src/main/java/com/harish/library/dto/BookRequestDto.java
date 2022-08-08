@@ -1,39 +1,32 @@
 package com.harish.library.dto;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.harish.library.model.Author;
-import com.harish.library.model.Book;
-import com.harish.library.model.Tag;
-import com.harish.library.model.Book.BookBuilder;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel
 public class BookRequestDto {
 	@NotNull
 	@JsonProperty("isbn")
-	@ApiModelProperty(value = "ISBN no. of the book")
+	@ApiModelProperty(value = "ISBN no.")
 	String isbn;
 
 	@NotNull
 	@JsonProperty("title")
-	@ApiModelProperty(value = "Title of the book")
+	@ApiModelProperty(value = "Book title")
 	String title;
 
 	@NotNull
 	@JsonProperty("author_id")
-	@ApiModelProperty(value = "Author information")
+	@ApiModelProperty(value = "Author id")
 	Long author_id;
 
 	@NotNull
 	@JsonProperty("tags")
-	@ApiModelProperty(value = "Tag information")
+	@ApiModelProperty(value = "Tags")
 	String[] tags;
 
 	public String getIsbn() {

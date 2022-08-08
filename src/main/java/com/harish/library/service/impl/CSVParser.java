@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.harish.library.dto.BookRequestDto;
@@ -20,7 +21,7 @@ import com.harish.library.service.FileParser;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
-@Component(value = "csvparser")
+@Service(value = "csvparser")
 public class CSVParser implements FileParser {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CSVParser.class);
 

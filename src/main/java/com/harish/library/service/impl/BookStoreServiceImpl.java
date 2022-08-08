@@ -14,9 +14,12 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.harish.library.dto.BookRequestDto;
+import com.harish.library.dto.ResponseDto;
 import com.harish.library.exceptions.AuthorNotFoundException;
 import com.harish.library.exceptions.BookNotFoundException;
 import com.harish.library.exceptions.DuplicateBookFoundException;
@@ -125,12 +128,16 @@ public class BookStoreServiceImpl implements IBookStoreService {
 
 	@Override
 	public Set<Book> findByTitle(String title) {
-		Set<Book> bookList = bookStoreRepository.findByTitle(title);
-		return bookList;
+		return bookStoreRepository.findByTitle(title);
 	}
 
 	@Override
 	public void deleteBook(String isbn) {
-		bookStoreRepository.deleteById(isbn);
+		Optional<Book> book = findBookByISBN(isbn);
+		if(book.isPresent()) {
+			bookStoreRepository.deleteById(isbn);
+		} else {
+			throw new BookNotFoundException("No book found with the given isbn : "+isbn);
+		}		
 	}
 }
