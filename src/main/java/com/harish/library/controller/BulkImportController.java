@@ -1,4 +1,5 @@
 package com.harish.library.controller;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -19,6 +20,8 @@ import com.harish.library.service.IBulkDataImportService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 /**
  * 
@@ -30,22 +33,28 @@ import io.swagger.annotations.ApiParam;
 @Api(value = "Bulk import API", description = "Bulk import API")
 public class BulkImportController {
 	private final IBulkDataImportService bulkDataImportService;
-	
+
 	@Autowired
-	BulkImportController(IBulkDataImportService bulkDataImportService){
+	BulkImportController(IBulkDataImportService bulkDataImportService) {
 		this.bulkDataImportService = bulkDataImportService;
 	}
-	
+
 	@PostMapping(value = "/upload/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "importBooks", nickname = "importBooks")
-    public ResponseEntity<ResponseDto> uploadBooksFromCSV(@ApiParam(value = "CSV file to upload", required = true) @RequestParam("csvfile") MultipartFile file) throws IOException {
-		List<Book> bookList = bulkDataImportService.importBooksFromFile(file);	
-		if(bookList.size() > 0) {
-			var responseDto = new ResponseDto.ResponseDtoBuilder("Books imported successfully from CSV").payload(bookList).build();
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
+			@ApiResponse(code = 422, message = "Unable to import books from the csv file"),
+			@ApiResponse(code = 201, message = "Books imported successfully from the csv file", response = ResponseDto.class) })
+	public ResponseEntity<ResponseDto> uploadBooksFromCSV(
+			@ApiParam(value = "CSV file to upload", required = true) @RequestParam("csvfile") MultipartFile file)
+			throws IOException {
+		List<Book> bookList = bulkDataImportService.importBooksFromFile(file);
+		if (bookList.size() > 0) {
+			var responseDto = new ResponseDto.ResponseDtoBuilder("Books imported successfully from CSV")
+					.payload(bookList).build();
 			return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 		} else {
 			var responseDto = new ResponseDto.ResponseDtoBuilder("Book import failed").build();
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseDto);
 		}
-    }
+	}
 }

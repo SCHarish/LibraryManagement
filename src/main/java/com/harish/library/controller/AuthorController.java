@@ -30,6 +30,8 @@ import com.harish.library.util.BookStoreUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 /**
  * 
@@ -41,41 +43,51 @@ import io.swagger.annotations.ApiParam;
 @Api(value = "CRUD API for Author", description = "CRUD API for Author")
 public class AuthorController {
 	private final IAuthorStoreService authorStoreService;
-	
+
 	@Autowired
-	AuthorController(IAuthorStoreService authorStoreService){
+	AuthorController(IAuthorStoreService authorStoreService) {
 		this.authorStoreService = authorStoreService;
 	}
-	
-	@PostMapping(value = "/authors", consumes = MediaType.APPLICATION_JSON_VALUE)
+
+	@PostMapping(value = "/authors", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "addAuthor", nickname = "addAuthor")
-	public ResponseEntity<ResponseDto> addAuthor(@ApiParam(value = "Author DTO", required = true) @RequestBody AuthorRequestDto requestDto) {
-		//Validate author request DTO
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
+			@ApiResponse(code = 200, message = "OK", response = ResponseDto.class) })
+	public ResponseEntity<ResponseDto> addAuthor(
+			@ApiParam(value = "Author DTO", required = true) @RequestBody AuthorRequestDto requestDto) {
+		// Validate author request DTO
 		BookStoreUtil.validateAuthorRequestDto(requestDto);
 		Author author = authorStoreService.addAuthor(requestDto);
 		var responseDto = new ResponseDto.ResponseDtoBuilder("Author created successfully").payload(author).build();
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
-	
+
 	@GetMapping(value = "/authors", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "getAllAuthors", nickname = "getAllAuthors")
-	public ResponseEntity<ResponseDto> getAllAuthors() throws NoResultsFoundException{	
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
+			@ApiResponse(code = 200, message = "OK", response = ResponseDto.class) })
+	public ResponseEntity<ResponseDto> getAllAuthors() throws NoResultsFoundException {
 		List<Author> authorList = authorStoreService.getAllAuthors();
 		var responseDto = new ResponseDto.ResponseDtoBuilder("Author created successfully").payload(authorList).build();
 		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
 	}
-	
-	@GetMapping(value = "/authors/{id}")
+
+	@GetMapping(value = "/authors/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "getAuthor", nickname = "getAuthor")
-	public ResponseEntity<Optional<Author>> getAuthor(@ApiParam(name="id", value ="Author ID", required = true) @PathVariable Long id) throws AuthorNotFoundException{	
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
+			@ApiResponse(code = 404, message = "Unable to find the author"),
+			@ApiResponse(code = 200, message = "OK", response = Author.class) })
+	public ResponseEntity<Optional<Author>> getAuthor(
+			@ApiParam(name = "id", value = "Author ID", required = true) @PathVariable Long id)
+			throws AuthorNotFoundException {
 		Optional<Author> author = authorStoreService.getAuthor(id);
-		if(author.isPresent()) {
-			return ResponseEntity.status(HttpStatus.OK).body(author);			
+		if (author.isPresent()) {
+			return ResponseEntity.status(HttpStatus.OK).body(author);
 		} else {
-			throw new AuthorNotFoundException("No author found with the given author id : "+ id);
+			throw new AuthorNotFoundException("No author found with the given author id : " + id);
 		}
 	}
 }

@@ -5,11 +5,14 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import io.swagger.annotations.ApiModel;
+
 /**
  * 
  * @author harishsc
  *
  */
+@ApiModel
 public class ResponseDto {
 	String message;
 	

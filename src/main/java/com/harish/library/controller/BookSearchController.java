@@ -28,6 +28,8 @@ import com.harish.library.service.impl.BookSearchServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 /**
  * 
@@ -48,6 +50,9 @@ public class BookSearchController {
 
 	@GetMapping(value = "/search/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "searchBooksByAttribute", response = Iterable.class, notes = "Get list of books by any of the attributes")
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
+			@ApiResponse(code = 404, message = "Unable to find any books in the library"),
+			@ApiResponse(code = 200, message = "OK", response = Book.class, responseContainer = "Set") })
 	public ResponseEntity<Set<Book>> searchBooksByAttribute(@ApiParam(value = "Book Title")@RequestParam(required = false) String title,
 			@ApiParam(value = "Book Tag")@RequestParam(required = false) String tag, @ApiParam(value = "Book ISBN No.")@RequestParam(required = false) String isbn,
 			@ApiParam(value = "Author Id")@RequestParam(required = false) Long author_id) throws AuthorNotFoundException {
@@ -108,7 +113,7 @@ public class BookSearchController {
 	public ResponseEntity<Set<Book>> searchBooksByAuthorId(@ApiParam(name="author_id", value ="Author ID", example="123", required = true)@RequestParam Long author_id) {
 		Set<Book> bookList = bookSearchService.searchBooksByAuthorId(author_id);
 		if (bookList.size() == 0) {
-			throw new NoResultsFoundException("No books found with the given author id");
+			throw new NoResultsFoundException("No books found with the given author id : "+author_id);
 		}
 		new ResponseEntity<BookRequestDto>(HttpStatus.OK);
 		return ResponseEntity.ok(bookList);
@@ -119,7 +124,7 @@ public class BookSearchController {
 	public ResponseEntity<Set<Book>> searchBooksByAuthorName(@ApiParam(name="author_name", value="Author Name", example="Harish", required = true)@PathVariable String author_name) {
 		Set<Book> bookList = bookSearchService.searchBooksByAuthorName(author_name);
 		if (bookList.size() == 0) {
-			throw new NoResultsFoundException("No books found with the given author name");
+			throw new NoResultsFoundException("No books found with the given author name : "+author_name);
 		}
 		new ResponseEntity<BookRequestDto>(HttpStatus.OK);
 		return ResponseEntity.ok(bookList);
@@ -130,7 +135,7 @@ public class BookSearchController {
 	public ResponseEntity<Set<Book>> searchBooksByTag(@ApiParam(name="name", value="Tag Name", example="fiction", required = true)@PathVariable String name) {
 		Set<Book> bookList = bookSearchService.searchBooksByTag(name);
 		if (bookList.size() == 0) {
-			throw new NoResultsFoundException("No books found with given tag name");
+			throw new NoResultsFoundException("No books found with given tag name : "+name);
 		}
 		new ResponseEntity<BookRequestDto>(HttpStatus.OK);
 		return ResponseEntity.ok(bookList);

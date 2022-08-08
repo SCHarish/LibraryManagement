@@ -53,7 +53,12 @@ public class BookStoreController {
 	@PostMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "addBook", nickname = "addBook")
-	public ResponseEntity<Object> addBook(@ApiParam(name="RequestDto", value="Book request DTO", required=true)@RequestBody BookRequestDto RequestDto)
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
+			@ApiResponse(code = 404, message = "Unable to find the Author"),
+			@ApiResponse(code = 409, message = "Duplicate book found"),
+			@ApiResponse(code = 200, message = "Book added successfully", response = ResponseDto.class) })
+	public ResponseEntity<ResponseDto> addBook(
+			@ApiParam(name = "RequestDto", value = "Book request DTO", required = true) @RequestBody BookRequestDto RequestDto)
 			throws DuplicateBookFoundException, InvalidDataException {
 		BookStoreUtil.validateBookRequestDto(RequestDto);
 		Book newBook = bookStoreService.addBook(RequestDto);
@@ -66,7 +71,7 @@ public class BookStoreController {
 	@ApiOperation(value = "getBook", nickname = "getBook")
 	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
 			@ApiResponse(code = 404, message = "Unable to find the book"),
-			@ApiResponse(code = 200, message = "OK", response = Book.class, responseContainer = "List") })
+			@ApiResponse(code = 200, message = "OK", response = Book.class) })
 	public ResponseEntity<Optional<Book>> getBook(
 			@ApiParam(value = "isbn", required = true, defaultValue = "") @PathVariable String isbn)
 			throws InvalidDataException, BookNotFoundException {
@@ -80,13 +85,22 @@ public class BookStoreController {
 	@GetMapping(value = "/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "getAllBooks", nickname = "getAllBooks")
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
+			@ApiResponse(code = 404, message = "Unable to find any books in the library"),
+			@ApiResponse(code = 200, message = "OK", response = Book.class, responseContainer = "Set") })
 	public ResponseEntity<Set<Book>> getAllBooks() {
 		Set<Book> bookList = bookStoreService.getAllBooks();
 		return ResponseEntity.status(HttpStatus.OK).body(bookList);
 	}
 
 	@PutMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> updateBook(@ApiParam(name="RequestDto", value="Book request DTO", required=true) @RequestBody BookRequestDto RequestDto) throws InvalidDataException {
+	@ApiOperation(value = "updateBook", nickname = "updateBook")
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
+			@ApiResponse(code = 404, message = "Unable to find the book"),
+			@ApiResponse(code = 200, message = "Book updated successfully", response = ResponseDto.class) })
+	public ResponseEntity<ResponseDto> updateBook(
+			@ApiParam(name = "RequestDto", value = "Book request DTO", required = true) @RequestBody BookRequestDto RequestDto)
+			throws InvalidDataException {
 		BookStoreUtil.validateBookRequestDto(RequestDto);
 		Book updatedBook = bookStoreService.updateBook(RequestDto);
 		var responseDto = new ResponseDto.ResponseDtoBuilder("Book information updated successfully")
@@ -95,7 +109,13 @@ public class BookStoreController {
 	}
 
 	@DeleteMapping(value = "/books/{isbn}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> deleteBook(@ApiParam(name="isbn", value="Book ISBN No.", required=true) @PathVariable String isbn) throws InvalidDataException, BookNotFoundException {
+	@ApiOperation(value = "deleteBook", nickname = "deleteBook")
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
+			@ApiResponse(code = 404, message = "Unable to find the book"),
+			@ApiResponse(code = 200, message = "Book deleted successfully", response = ResponseDto.class) })
+	public ResponseEntity<ResponseDto> deleteBook(
+			@ApiParam(name = "isbn", value = "Book ISBN No.", required = true) @PathVariable String isbn)
+			throws InvalidDataException, BookNotFoundException {
 		BookStoreUtil.isValidISBN(isbn);
 		bookStoreService.deleteBook(isbn);
 		var responseDto = new ResponseDto.ResponseDtoBuilder("Book information deleted successfully").build();

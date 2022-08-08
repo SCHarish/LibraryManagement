@@ -17,22 +17,22 @@ import io.swagger.annotations.ApiModelProperty;
 public class BookRequestDto {
 	@NotNull
 	@JsonProperty("isbn")
-	@ApiModelProperty(value = "ISBN no.")
+	@ApiModelProperty(value = "ISBN no.", example = "333-2-99-248231-7", required = true)
 	String isbn;
 
 	@NotNull
 	@JsonProperty("title")
-	@ApiModelProperty(value = "Book title")
+	@ApiModelProperty(value = "Book title", example = "Harry Potter", required = false )
 	String title;
 
 	@NotNull
 	@JsonProperty("authorId")
-	@ApiModelProperty(value = "Author id")
+	@ApiModelProperty(value = "Author id", example = "123", required = true)
 	Long authorId;
 
 	@NotNull
 	@JsonProperty("tags")
-	@ApiModelProperty(value = "Tags")
+	@ApiModelProperty(value = "Tags", example = "action", required = true)
 	String[] tags;
 
 	public String getIsbn() {

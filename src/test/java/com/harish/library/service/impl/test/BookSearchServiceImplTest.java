@@ -91,4 +91,5 @@ public class BookSearchServiceImplTest {
 		// When
 		bookSearchService.searchBooksByAuthorId(author_id);
 	}
+
 }

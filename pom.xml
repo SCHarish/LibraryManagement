@@ -40,7 +40,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Sprint data JPA for Persistence -->
+		<!-- Sprint data JPA for easy data access -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>

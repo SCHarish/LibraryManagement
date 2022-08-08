@@ -16,11 +16,11 @@ import io.swagger.annotations.ApiModelProperty;
 public class AuthorRequestDto {
 	@NotNull
 	@JsonProperty("name")
-	@ApiModelProperty(value = "Author of the book")
+	@ApiModelProperty(value = "Author of the book", example = "Harish", required = false)
 	String name;
 	
 	@JsonProperty("country")
-	@ApiModelProperty(value = "Author country")
+	@ApiModelProperty(value = "Author country", example ="India", required = false)
 	String country;
 
 	public String getName() {
