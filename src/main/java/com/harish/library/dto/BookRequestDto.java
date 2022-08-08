@@ -27,12 +27,12 @@ public class BookRequestDto {
 
 	@NotNull
 	@JsonProperty("authorId")
-	@ApiModelProperty(value = "Author id", example = "123", required = true)
+	@ApiModelProperty(value = "Author id", dataType="Long", example = "123", required = true)
 	Long authorId;
 
 	@NotNull
 	@JsonProperty("tags")
-	@ApiModelProperty(value = "Tags", example = "action", required = true)
+	@ApiModelProperty(value = "Tags", dataType = "[Ljava.lang.String;", required = true)
 	String[] tags;
 
 	public String getIsbn() {

@@ -102,6 +102,9 @@ public class BookSearchController {
 
 	@GetMapping(value = "/title/{title}/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "searchBooksByTitle", response = Iterable.class)
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
+			@ApiResponse(code = 404, message = "Unable to find any books in the library"),
+			@ApiResponse(code = 200, message = "OK", response = Book.class, responseContainer = "Set") })
 	public ResponseEntity<Set<Book>> searchBooksByTitle(@ApiParam(name="title", value ="Book title", example="Harry Potter", required = true)@PathVariable String title) {
 		Set<Book> bookList = bookSearchService.searchBooksByTitle(title);
 		new ResponseEntity<BookRequestDto>(HttpStatus.OK);
@@ -110,6 +113,9 @@ public class BookSearchController {
 
 	@GetMapping(value = "/author/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "searchBooksByAuthorId", response = Iterable.class, notes = "Get list of books written by an author")
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
+			@ApiResponse(code = 404, message = "Unable to find any books in the library"),
+			@ApiResponse(code = 200, message = "OK", response = Book.class, responseContainer = "Set") })
 	public ResponseEntity<Set<Book>> searchBooksByAuthorId(@ApiParam(name="author_id", value ="Author ID", example="123", required = true)@RequestParam Long author_id) {
 		Set<Book> bookList = bookSearchService.searchBooksByAuthorId(author_id);
 		if (bookList.size() == 0) {
@@ -121,6 +127,9 @@ public class BookSearchController {
 
 	@GetMapping(value = "/author/{author_name}/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "searchBooksByAuthorName", response = Iterable.class, notes = "Get list of books written by an author")
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
+			@ApiResponse(code = 404, message = "Unable to find any books in the library"),
+			@ApiResponse(code = 200, message = "OK", response = Book.class, responseContainer = "Set") })
 	public ResponseEntity<Set<Book>> searchBooksByAuthorName(@ApiParam(name="author_name", value="Author Name", example="Harish", required = true)@PathVariable String author_name) {
 		Set<Book> bookList = bookSearchService.searchBooksByAuthorName(author_name);
 		if (bookList.size() == 0) {
@@ -132,6 +141,9 @@ public class BookSearchController {
 
 	@GetMapping(value = "/tag/{name}/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "searchBooksByTag", response = Iterable.class, notes = "Get list of books based on tag name")
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
+			@ApiResponse(code = 404, message = "Unable to find any books in the library"),
+			@ApiResponse(code = 200, message = "OK", response = Book.class, responseContainer = "Set") })
 	public ResponseEntity<Set<Book>> searchBooksByTag(@ApiParam(name="name", value="Tag Name", example="fiction", required = true)@PathVariable String name) {
 		Set<Book> bookList = bookSearchService.searchBooksByTag(name);
 		if (bookList.size() == 0) {
