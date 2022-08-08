@@ -12,6 +12,11 @@ import com.harish.library.model.Author;
 import com.harish.library.repository.AuthorRepository;
 import com.harish.library.service.IAuthorStoreService;
 
+/**
+ * 
+ * @author harishsc
+ *
+ */
 @Service
 public class AuthorStoreServiceImpl implements IAuthorStoreService{
 	

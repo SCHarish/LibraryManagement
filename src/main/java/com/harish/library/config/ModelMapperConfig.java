@@ -8,14 +8,13 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 
+ * @author harishsc
+ *
+ */
 @Configuration
 public class ModelMapperConfig {
-    /**
-     * Initializes {@link ModelMapper} with available {@link PropertyMap} instances.
-     *
-     * @param propertyMaps
-     * @return
-     */
     @Bean
     public ModelMapper modelMapper(List<PropertyMap> propertyMaps) {
         final ModelMapper modelMapper = new ModelMapper();

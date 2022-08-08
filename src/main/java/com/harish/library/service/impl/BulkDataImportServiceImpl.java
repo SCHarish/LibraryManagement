@@ -15,6 +15,12 @@ import com.harish.library.service.FileParser;
 import com.harish.library.service.IBookStoreService;
 import com.harish.library.service.IBulkDataImportService;
 import java.util.List;
+
+/**
+ * 
+ * @author harishsc
+ *
+ */
 @Service
 public class BulkDataImportServiceImpl implements IBulkDataImportService{
 	

@@ -14,6 +14,11 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * 
+ * @author harishsc
+ *
+ */
 @Entity
 @Table(name = "Author")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler", "books" })

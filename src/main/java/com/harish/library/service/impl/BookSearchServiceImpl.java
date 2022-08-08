@@ -22,6 +22,11 @@ import com.harish.library.service.IBookSearchService;
 import com.harish.library.service.IBookStoreService;
 import com.harish.library.service.ITagStoreService;
 
+/**
+ * 
+ * @author harishsc
+ *
+ */
 @Service
 public class BookSearchServiceImpl implements IBookSearchService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BookSearchServiceImpl.class);

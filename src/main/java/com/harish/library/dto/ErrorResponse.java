@@ -4,10 +4,19 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+/**
+ * 
+ * @author harishsc
+ *
+ */
 public class ErrorResponse {
 	// General error message about nature of error
 	private String message;
-
+	
+	@JsonInclude(Include.NON_NULL)
 	private List<String> details;
 
 	public String getMessage() {

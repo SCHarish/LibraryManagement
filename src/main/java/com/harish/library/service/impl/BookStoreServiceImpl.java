@@ -36,6 +36,11 @@ import com.harish.library.service.IBookStoreService;
 import com.harish.library.util.BookStoreUtil;
 import com.harish.library.model.Tag;
 
+/**
+ * 
+ * @author harishsc
+ *
+ */
 @Service
 public class BookStoreServiceImpl implements IBookStoreService {
 

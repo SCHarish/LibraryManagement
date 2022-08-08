@@ -23,6 +23,11 @@ import com.harish.library.exceptions.InvalidDataException;
 import com.harish.library.exceptions.InvalidFileException;
 import com.harish.library.exceptions.NoResultsFoundException;
 
+/**
+ * 
+ * @author harishsc
+ *
+ */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @ControllerAdvice
 public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {

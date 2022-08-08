@@ -3,20 +3,22 @@ package com.harish.library.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.annotations.CascadeType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cascade;
-
 /**
- * Representation of Book Table
- **/
+ * 
+ * @author harishsc
+ *
+ */
 @Entity
 @Table(name = "book")
 public class Book {
@@ -53,16 +55,15 @@ public class Book {
 	}
 
 	// Many books can be written by one author
-	@ManyToOne(targetEntity = Author.class)
-	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.MERGE, CascadeType.PERSIST })
+	@ManyToOne(targetEntity = Author.class, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
 	public Author getAuthor() {
 		return author;
 	}
 
 	// A book can have many tags and vice-versa
-	@ManyToMany
-	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.MERGE, CascadeType.PERSIST })
-	@JoinColumn(name = "tag_name")
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "book_tags", joinColumns = { @JoinColumn(name = "book_isbn") }, inverseJoinColumns = {
+			@JoinColumn(name = "tag_name") })
 	public Set<Tag> getTags() {
 		return tags;
 	}

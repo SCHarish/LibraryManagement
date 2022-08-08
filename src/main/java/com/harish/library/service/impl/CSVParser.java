@@ -21,6 +21,11 @@ import com.harish.library.service.FileParser;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
+/**
+ * 
+ * @author harishsc
+ *
+ */
 @Service(value = "csvparser")
 public class CSVParser implements FileParser {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CSVParser.class);

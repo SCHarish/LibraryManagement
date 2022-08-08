@@ -35,7 +35,8 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiParam;
 
 /**
- * Controller for the CRUD operations on Book entity
+ * 
+ * @author harishsc
  *
  */
 @RestController

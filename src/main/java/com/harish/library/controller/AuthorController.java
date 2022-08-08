@@ -28,6 +28,11 @@ import com.harish.library.util.BookStoreUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 
+/**
+ * 
+ * @author harishsc
+ *
+ */
 @RestController
 @RequestMapping("/api/v1")
 @Api(value = "CRUD API for Author", description = "CRUD API for Author")
