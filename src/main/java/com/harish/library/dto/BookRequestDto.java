@@ -1,3 +1,4 @@
+
 package com.harish.library.dto;
 
 import javax.validation.constraints.NotNull;
@@ -20,9 +21,9 @@ public class BookRequestDto {
 	String title;
 
 	@NotNull
-	@JsonProperty("author_id")
+	@JsonProperty("authorId")
 	@ApiModelProperty(value = "Author id")
-	Long author_id;
+	Long authorId;
 
 	@NotNull
 	@JsonProperty("tags")
@@ -46,11 +47,11 @@ public class BookRequestDto {
 	}
 
 	public Long getAuthorId() {
-		return author_id;
+		return authorId;
 	}
 
 	public void setAuthorId(Long author_id) {
-		this.author_id = author_id;
+		this.authorId = author_id;
 	}
 
 	public String[] getTags() {
@@ -68,13 +69,13 @@ public class BookRequestDto {
 	public BookRequestDto(String isbn, String title, Long author_id, String[] tags) {
 		this.isbn = isbn;
 		this.title = title;
-		this.author_id = author_id;
+		this.authorId = author_id;
 		this.tags = tags;
 	}
 
 	private BookRequestDto(BookRequestDtoBuilder builder) {
 		this.isbn = builder.isbn;
-		this.author_id = builder.author_id;
+		this.authorId = builder.authorId;
 		this.title = builder.title;
 		this.tags = builder.tags;
 	}
@@ -82,7 +83,7 @@ public class BookRequestDto {
 	public static class BookRequestDtoBuilder {
 		private String isbn;
 		private String title;
-		private Long author_id;
+		private Long authorId;
 		private String[] tags;
 
 		public BookRequestDtoBuilder() {
@@ -99,8 +100,8 @@ public class BookRequestDto {
 			return this;
 		}
 
-		public BookRequestDtoBuilder author(Long author_id) {
-			this.author_id = author_id;
+		public BookRequestDtoBuilder author(Long authorId) {
+			this.authorId = authorId;
 			return this;
 		}
 

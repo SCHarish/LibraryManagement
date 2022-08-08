@@ -3,11 +3,7 @@ package com.harish.library.controller.test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import org.junit.Before;
@@ -46,7 +42,7 @@ public class BookSearchControllerTest {
 
 	@Mock
 	private IAuthorStoreService authorStoreService;
-	
+
 	@MockBean
 	private IBookStoreService bookStoreService;
 
@@ -64,14 +60,44 @@ public class BookSearchControllerTest {
 		books.add(new Book(isbn, "Harry Potter"));
 		when(bookStoreService.findByTitle("Harry Potter")).thenReturn(books);
 		when(bookSearchService.searchBooksByTitle(title)).thenReturn(books);
-		
-		
+
+		// Act and Assert
+		mockMvc.perform(MockMvcRequestBuilders.get(url)).andExpect(status().isOk());
+	}
+
+	@Test
+	public void testSearchBooksByAttribute_SearchWithTagAndAuthorId() throws Exception {
+		// Given
+		String url = "/api/v1/search/books?tag=harish&author_id=123";
+		Set<Book> books = new HashSet<>();
+		books.add(new Book(isbn, "Harry Potter"));
+		Set<Book> book_list2 = new HashSet<>();
+		book_list2.add(new Book("999-3-55-248511-1", "Harish's Biography"));
+		when(bookSearchService.searchBooksByTag("harish")).thenReturn(book_list2);
+		when(bookSearchService.searchBooksByAuthorId(123L)).thenReturn(books);
+
 		// Act and Assert
 		mockMvc.perform(MockMvcRequestBuilders.get(url)).andExpect(status().isOk());
 	}
 	
 	@Test
-	public void testSearchBooksByAuthorId_NoBooksFound_ThrowsNoResultsFoundException() throws Exception {
-		String url = "/api/v1/author/" + 1 + "/books";
+	public void testSearchBooksByAttribute_SearchWithTitleAndTag() throws Exception {
+		// Given
+		String url = "/api/v1/search/books?title=harry%20potter&tag=fiction";
+		Set<Book> books = new HashSet<>();
+		books.add(new Book(isbn, "Harry Potter"));
+		Set<Book> book_list2 = new HashSet<>();
+		book_list2.add(new Book("999-3-55-248511-1", "Harish's Biography"));
+		when(bookSearchService.searchBooksByTitle("harry potter")).thenReturn(book_list2);
+		when(bookSearchService.searchBooksByTag("fiction")).thenReturn(books);
+
+		// Act and Assert
+		mockMvc.perform(MockMvcRequestBuilders.get(url)).andExpect(status().isOk());
 	}
+
+//	@Test
+//	public void testSearchBooksByAuthorId_NoBooksFound_ThrowsNoResultsFoundException() throws Exception {
+//		String url = "/api/v1/author/" + 1 + "/books";
+//		mockMvc.perform(MockMvcRequestBuilders.get(url)).andExpect(status().isOk());
+//	}
 }

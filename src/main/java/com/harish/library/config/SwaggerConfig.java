@@ -22,13 +22,13 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.any())
                 .paths(regex("/api.*"))
                 .build()
-                .apiInfo(metaInfo());
+                .apiInfo(apiInfo());
     }
 
-    private ApiInfo metaInfo() {
-        return new ApiInfoBuilder().title("Book Store")
-                .description("Java Spring Boot Application that Represents a Simple Bookstore.")
-                .version("1.0")
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder().title("Library Management Application")
+                .description("A simple library management application to manage books")
+                .version("1.0").contact("harishchandiramohan@gmail.com")
                 .build();
     }
 }
