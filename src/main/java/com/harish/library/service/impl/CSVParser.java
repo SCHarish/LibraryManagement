@@ -17,21 +17,22 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.harish.library.dto.BookRequestDto;
 import com.harish.library.exceptions.InvalidFileException;
-import com.harish.library.service.FileParser;
+import com.harish.library.service.IFileParser;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 /**
+ * CSV parser
  * 
  * @author harishsc
  *
  */
 @Service(value = "csvparser")
-public class CSVParser implements FileParser {
+public class CSVParser implements IFileParser {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CSVParser.class);
 
 	@Override
-	public List<BookRequestDto> parse(MultipartFile file) throws IOException {
+	public List<BookRequestDto> parseBookDtoFromFile(MultipartFile file) throws IOException {
 		List<BookRequestDto> booksInCSV = new ArrayList<BookRequestDto>();
 		// parse CSV file to create a list of `BookRequestDto` objects
 		try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
@@ -43,8 +44,8 @@ public class CSVParser implements FileParser {
 			// convert `CsvToBean` object to list of books
 			booksInCSV = csvToBean.parse();
 		} catch (Exception ex) {
-			LOGGER.error("Error occurred in file parsing - "+ex.getMessage());
-			throw new InvalidFileException("Invalid csv file content :: "+ex.getMessage());
+			LOGGER.error("Error occurred in file parsing - " + ex.getMessage());
+			throw new InvalidFileException("Invalid csv file content :: " + ex.getMessage());
 		}
 		return booksInCSV;
 	}

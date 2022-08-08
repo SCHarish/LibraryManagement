@@ -57,7 +57,8 @@ public class BookStoreServiceImpl implements IBookStoreService {
 	@Override
 	public Optional<Book> findBookByISBN(String isbn) {
 		Optional<Book> book = bookStoreRepository.findById(isbn);
-		return Optional.ofNullable(book.orElseThrow(() -> new BookNotFoundException("No book found with the given ISBN: " + isbn)));
+		return Optional.ofNullable(
+				book.orElseThrow(() -> new BookNotFoundException("No book found with the given ISBN: " + isbn)));
 	}
 
 	@Override
@@ -76,7 +77,7 @@ public class BookStoreServiceImpl implements IBookStoreService {
 		Optional<Book> bookInfo = bookStoreRepository.findById(bookDto.getIsbn());
 
 		bookInfo.ifPresent(book -> {
-			throw new DuplicateBookFoundException("Book with the isbn : "+bookDto.getIsbn() + " is already present");
+			throw new DuplicateBookFoundException("Book with the isbn : " + bookDto.getIsbn() + " is already present");
 		});
 
 		LOGGER.info("No duplicate book found");
@@ -87,12 +88,12 @@ public class BookStoreServiceImpl implements IBookStoreService {
 		if (authorInfo.isPresent()) {
 			List<String> tags = Arrays.asList(bookDto.getTags());
 			List<Tag> newTagList = BookStoreUtil.constructTags(tags);
-			
+
 			// converting dto to domain object
 			Book newBook = BookStoreUtil.constructBook(bookDto, authorInfo.get(), newTagList);
 			return bookStoreRepository.save(newBook);
 		} else {
-			throw new AuthorNotFoundException("No author found with the given author id : "+bookDto.getAuthorId());
+			throw new AuthorNotFoundException("No author found with the given author id : " + bookDto.getAuthorId());
 		}
 	}
 
@@ -114,20 +115,40 @@ public class BookStoreServiceImpl implements IBookStoreService {
 	}
 
 	@Override
-	public void addBooks(List<BookRequestDto> requestDtoList) {
+	public List<Book> addBooks(List<BookRequestDto> requestDtoList) {
 		List<Book> newBooks = new ArrayList<Book>();
 		requestDtoList.forEach((requestDto) -> {
-			Optional<Author> authorInfo = authorStoreService.getAuthor(requestDto.getAuthorId());
-			if (authorInfo.isPresent()) {
-				List<String> updatedTagList = Arrays.asList(requestDto.getTags());
-				List<Tag> newTagList = BookStoreUtil.constructTags(updatedTagList);
+			Optional<Author> author = Optional.empty();
+			try {
+				author = authorStoreService.getAuthor(requestDto.getAuthorId());
+			} catch (AuthorNotFoundException ex) {
+				LOGGER.error("Author not found exception");
+			}
+			if (author.isPresent()) {
+				Optional<Book> book = Optional.empty();
+				try {
+					book = findBookByISBN(requestDto.getIsbn());
+				} catch (BookNotFoundException ex) {
+					LOGGER.error("Book not found exception");
+				}
+				if (!book.isPresent()) {
+					List<String> updatedTagList = Arrays.asList(requestDto.getTags());
+					List<Tag> newTagList = BookStoreUtil.constructTags(updatedTagList);
 
-				// converting dto to domain object
-				Book newBook = BookStoreUtil.constructBook(requestDto, authorInfo.get(), newTagList);
-				newBooks.add(newBook);
+					// converting dto to domain object
+					Book newBook = BookStoreUtil.constructBook(requestDto, author.get(), newTagList);
+					newBooks.add(newBook);
+				} else {
+					LOGGER.error("Unable to create Book entity. Because an another Book with the same ISBN no. "
+							+ requestDto.getIsbn() + " is already present");
+				}
+			} else {
+				LOGGER.error("Unable to create Book entity. Because, no Author found with the author id : "
+						+ requestDto.getAuthorId());
 			}
 		});
-		bookStoreRepository.saveAll(newBooks);
+		Iterable<Book> iterable = bookStoreRepository.saveAll(newBooks);
+		return StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
 	}
 
 	@Override
@@ -138,10 +159,10 @@ public class BookStoreServiceImpl implements IBookStoreService {
 	@Override
 	public void deleteBook(String isbn) {
 		Optional<Book> book = findBookByISBN(isbn);
-		if(book.isPresent()) {
+		if (book.isPresent()) {
 			bookStoreRepository.deleteById(isbn);
 		} else {
-			throw new BookNotFoundException("No book found with the given isbn : "+isbn);
-		}		
+			throw new BookNotFoundException("No book found with the given isbn : " + isbn);
+		}
 	}
 }

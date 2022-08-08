@@ -66,7 +66,6 @@ public class ResponseDto {
 		
 		public ResponseDto build() {
 			var responseDto = new ResponseDto(this);
-			//TODO :: validate book object
 			return responseDto;
 		}
 	}

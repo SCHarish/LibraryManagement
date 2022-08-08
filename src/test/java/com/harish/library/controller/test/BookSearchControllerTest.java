@@ -1,6 +1,5 @@
 package com.harish.library.controller.test;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.util.HashSet;

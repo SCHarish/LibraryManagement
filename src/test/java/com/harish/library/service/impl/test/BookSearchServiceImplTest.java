@@ -27,16 +27,13 @@ import com.harish.library.service.IBookStoreService;
 import com.harish.library.service.ITagStoreService;
 import com.harish.library.service.impl.BookSearchServiceImpl;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class BookSearchServiceImplTest {
 	private final String isbn = "121-3-66-248511-3";
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
-
-	@Mock
-	private BookStoreRepository bookStoreRepository;
 
 	@Mock
 	private IBookStoreService bookStoreService;
@@ -67,7 +64,6 @@ public class BookSearchServiceImplTest {
 		// Given
 		Set<Book> books = new HashSet<>();
 		books.add(new Book(isbn, "Harry Potter"));
-		when(bookStoreService.findByTitle(null)).thenReturn(books);
 		var author = mock(Author.class);
 		when(author.getBooks()).thenReturn(books);
 		List<Author> authorList = new ArrayList<>();

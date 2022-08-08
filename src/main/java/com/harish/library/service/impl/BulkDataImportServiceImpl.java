@@ -1,7 +1,6 @@
 package com.harish.library.service.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.harish.library.dto.BookRequestDto;
-import com.harish.library.service.FileParser;
+import com.harish.library.model.Book;
+import com.harish.library.service.IFileParser;
 import com.harish.library.service.IBookStoreService;
 import com.harish.library.service.IBulkDataImportService;
 import java.util.List;
@@ -22,23 +22,23 @@ import java.util.List;
  *
  */
 @Service
-public class BulkDataImportServiceImpl implements IBulkDataImportService{
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(BookStoreServiceImpl.class);
-	
+public class BulkDataImportServiceImpl implements IBulkDataImportService {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(BulkDataImportServiceImpl.class);
+
 	@Autowired
 	private final IBookStoreService bookStoreService;
-	
+
 	@Autowired
 	@Qualifier("csvparser")
-	FileParser parser;
-	
-	BulkDataImportServiceImpl(IBookStoreService bookStoreService){
+	IFileParser fileParser;
+
+	BulkDataImportServiceImpl(IBookStoreService bookStoreService) {
 		this.bookStoreService = bookStoreService;
 	}
-	
-	public void importFromFile(MultipartFile file) throws IOException {
-		List<BookRequestDto> requestDtoList = parser.parse(file);
-		bookStoreService.addBooks(requestDtoList);
+
+	public List<Book> importBooksFromFile(MultipartFile file) throws IOException {
+		List<BookRequestDto> requestDtoList = fileParser.parseBookDtoFromFile(file);
+		return bookStoreService.addBooks(requestDtoList);
 	}
 }

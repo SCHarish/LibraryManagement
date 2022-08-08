@@ -43,7 +43,7 @@ public interface IBookStoreService {
 	 * 
 	 * @param requestDtoList
 	 */
-	public void addBooks(List<BookRequestDto> requestDtoList);
+	public List<Book> addBooks(List<BookRequestDto> requestDtoList);
 	
 	/**
 	 * 

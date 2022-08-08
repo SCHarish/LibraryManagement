@@ -31,7 +31,7 @@ import com.harish.library.repository.BookStoreRepository;
 import com.harish.library.service.IAuthorStoreService;
 import com.harish.library.service.impl.BookStoreServiceImpl;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class BookStoreServiceImplTest {
 
 	private final String isbn = "121-3-66-248511-3";
@@ -97,7 +97,6 @@ public class BookStoreServiceImplTest {
 		BookRequestDto requestDto = mock(BookRequestDto.class);
 		when(requestDto.getIsbn()).thenReturn(isbn);
 		when(requestDto.getAuthorId()).thenReturn(123L);
-		when(authorStoreService.getAuthor(author_id)).thenReturn(Optional.empty());
 		
 		// When
 		bookStoreService.addBook(requestDto);
