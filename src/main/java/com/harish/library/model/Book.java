@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
+import org.hibernate.annotations.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -19,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
 
 /**
  * Representation of Book Table
@@ -60,14 +62,16 @@ public class Book {
 	}
 
 	// Many books can be written by one author
-	@ManyToOne(targetEntity = Author.class, cascade = CascadeType.ALL)
+	@ManyToOne(targetEntity = Author.class)
+	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.MERGE, CascadeType.PERSIST })
 	public Author getAuthor() {
 		return author;
 	}
 
 	// A book can have many tags and vice-versa
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "book_tags", joinColumns = @JoinColumn(name = "book_isbn"), inverseJoinColumns = @JoinColumn(name = "tag_name"))
+	@ManyToMany
+	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.MERGE, CascadeType.PERSIST })
+	@JoinColumn(name = "tag_name")
 	public Set<Tag> getTags() {
 		return tags;
 	}
@@ -75,6 +79,10 @@ public class Book {
 	public void setTags(Set<Tag> tags) {
 		this.tags = tags;
 		tags.stream().forEach(tag -> tag.setBook(this));
+	}
+
+	public void setTag(Tag tag) {
+		this.tags.add(tag);
 	}
 
 	public Book() {

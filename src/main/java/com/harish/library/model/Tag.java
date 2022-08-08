@@ -3,7 +3,6 @@ package com.harish.library.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -16,6 +15,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -23,12 +25,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "books"})
 public class Tag {
 
+//	@Id
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+//	private Long Id;
+	
 	@Id
 	@Column(name = "name", length = 50, nullable = false)
 	private String name;
 
 	@ElementCollection(targetClass=Book.class)
-	@ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL, fetch = FetchType.LAZY) 
+//	@ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany
+	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE, CascadeType.PERSIST})
+	@JoinColumn(name="boos_isbn")
+	//@JoinTable(name = "book_tags", joinColumns = @JoinColumn(name = "tag_name"), inverseJoinColumns=@JoinColumn(name="book_isbn"))
 	private Set<Book> books = new HashSet<Book>();
 
 	public Tag(String name) {
@@ -53,6 +63,7 @@ public class Tag {
 
 	public void setBooks(Set<Book> books) {
 		this.books = books;
+		//books.stream().forEach(book -> book.setTag(this));
 	}
 
 	public Tag() {

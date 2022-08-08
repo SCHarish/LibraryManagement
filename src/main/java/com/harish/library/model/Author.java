@@ -14,10 +14,9 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
 @Entity
-@Table(name="Author")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "books"})
+@Table(name = "Author")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler", "books" })
 public class Author {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,9 +24,10 @@ public class Author {
 
 	@Column(name = "name", length = 100, nullable = false)
 	private String name;
-	
-	@OneToMany(targetEntity=Book.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name="author_id", referencedColumnName = "id")
+
+	// An Author can write many books
+	@OneToMany(targetEntity = Book.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "author_id")
 	private Set<Book> books;
 
 	public Long getId() {
@@ -46,20 +46,18 @@ public class Author {
 		this.name = name;
 	}
 
-	//An author can write many books
-	@OneToMany(mappedBy = "author")
 	public Set<Book> getBooks() {
 		return books;
 	}
 
 	public void setBooks(Set<Book> books) {
 		this.books = books;
-	} 
-	
+	}
+
 	public Author(String name) {
 		this.name = name;
 	}
-	
+
 	public Author() {
 		super();
 	}
