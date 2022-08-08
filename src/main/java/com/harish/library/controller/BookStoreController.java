@@ -51,7 +51,7 @@ public class BookStoreController {
 
 	@PostMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> addBook(@RequestBody BookRequestDto RequestDto)
+	public ResponseEntity<Object> addBook(@ApiParam(name="RequestDto", value="Book request DTO", required=true)@RequestBody BookRequestDto RequestDto)
 			throws DuplicateBookFoundException, InvalidDataException {
 		BookStoreUtil.validateBookRequestDto(RequestDto);
 		Book newBook = bookStoreService.addBook(RequestDto);
@@ -84,7 +84,7 @@ public class BookStoreController {
 	}
 
 	@PutMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> updateBook(@RequestBody BookRequestDto RequestDto) throws InvalidDataException {
+	public ResponseEntity<Object> updateBook(@ApiParam(name="RequestDto", value="Book request DTO", required=true) @RequestBody BookRequestDto RequestDto) throws InvalidDataException {
 		BookStoreUtil.validateBookRequestDto(RequestDto);
 		Book updatedBook = bookStoreService.updateBook(RequestDto);
 		var responseDto = new ResponseDto.ResponseDtoBuilder("Book information updated successfully")
@@ -93,7 +93,7 @@ public class BookStoreController {
 	}
 
 	@DeleteMapping(value = "/books/{isbn}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> deleteBook(@PathVariable String isbn) throws InvalidDataException, BookNotFoundException {
+	public ResponseEntity<Object> deleteBook(@ApiParam(name="isbn", value="Book ISBN No.", required=true) @PathVariable String isbn) throws InvalidDataException, BookNotFoundException {
 		BookStoreUtil.isValidISBN(isbn);
 		bookStoreService.deleteBook(isbn);
 		var responseDto = new ResponseDto.ResponseDtoBuilder("Book information deleted successfully").build();

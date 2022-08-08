@@ -15,6 +15,7 @@ import com.harish.library.dto.ResponseDto;
 import com.harish.library.service.IBulkDataImportService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -28,7 +29,7 @@ public class BulkImportController {
 	}
 	
 	@PostMapping(value = "/upload/books")
-    public ResponseEntity<Object> uploadBooksFromCSV(@RequestParam("csvfile") MultipartFile file) throws IOException {
+    public ResponseEntity<Object> uploadBooksFromCSV(@ApiParam(value = "CSV file to upload", required = true) @RequestParam("csvfile") MultipartFile file) throws IOException {
 		bulkDataImportService.importFromFile(file);
 		var responseDto = new ResponseDto.ResponseDtoBuilder("Books imported successfully from CSV").build();
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.harish.library.exceptions.AuthorNotFoundException;
+import com.harish.library.exceptions.BookNotFoundException;
 import com.harish.library.exceptions.InvalidDataException;
 import com.harish.library.exceptions.NoResultsFoundException;
 import com.harish.library.model.Author;
@@ -40,11 +41,21 @@ public class BookSearchServiceImpl implements IBookSearchService {
 
 	@Override
 	public Set<Book> searchBooksByTitle(String title) {
-		Set<Book> bookList =  bookStoreService.findByTitle(title);
-		if(bookList.size() == 0) {
-			throw new NoResultsFoundException("No books found with the given title : "+title);
+		Set<Book> bookList = bookStoreService.findByTitle(title);
+		if (bookList.size() == 0) {
+			throw new NoResultsFoundException("No books found with the given title : " + title);
 		}
 		return bookList;
+	}
+
+	@Override
+	public Book searchBookByISBN(String isbn) {
+		Optional<Book> book = bookStoreService.findBookByISBN(isbn);
+		if (book.isPresent()) {
+			return book.get();
+		} else {
+			throw new BookNotFoundException("No book found with the given ISBN no. : " + isbn);
+		}
 	}
 
 	@Override
@@ -52,8 +63,8 @@ public class BookSearchServiceImpl implements IBookSearchService {
 		Set<Tag> tagList = tagStoreService.getTagsByName(name);
 		Set<Book> bookList = new HashSet<Book>();
 		tagList.forEach(tag -> bookList.addAll(tag.getBooks()));
-		if(bookList.size() == 0) {
-			throw new NoResultsFoundException("No books found with the given tag : "+name);
+		if (bookList.size() == 0) {
+			throw new NoResultsFoundException("No books found with the given tag : " + name);
 		}
 		return bookList;
 	}
@@ -63,12 +74,12 @@ public class BookSearchServiceImpl implements IBookSearchService {
 		Optional<Author> author = authorStoreService.getAuthor(author_id);
 		if (author.isPresent()) {
 			Set<Book> bookList = author.get().getBooks();
-			if(bookList.size() == 0) {
-				throw new NoResultsFoundException("No books found for the given author id - "+author_id);
+			if (bookList.size() == 0) {
+				throw new NoResultsFoundException("No books found for the given author id - " + author_id);
 			}
 			return bookList;
 		} else {
-			throw new AuthorNotFoundException("No author found with the given author id : "+author_id);
+			throw new AuthorNotFoundException("No author found with the given author id : " + author_id);
 		}
 	}
 
@@ -77,8 +88,8 @@ public class BookSearchServiceImpl implements IBookSearchService {
 		List<Author> authorList = authorStoreService.getAuthorsByName(author_name);
 		Set<Book> bookList = new HashSet<Book>();
 		authorList.forEach(author -> bookList.addAll(author.getBooks()));
-		if(bookList.size() == 0) {
-			throw new NoResultsFoundException("No books found with the given author name : "+author_name);
+		if (bookList.size() == 0) {
+			throw new NoResultsFoundException("No books found with the given author name : " + author_name);
 		}
 		return bookList;
 	}

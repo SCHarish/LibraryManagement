@@ -26,6 +26,7 @@ import com.harish.library.service.IBookStoreService;
 import com.harish.library.util.BookStoreUtil;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -56,7 +57,7 @@ public class AuthorController {
 	
 	@GetMapping(value = "/authors/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Optional<Author>> getAuthor(@PathVariable Long id) throws AuthorNotFoundException{	
+	public ResponseEntity<Optional<Author>> getAuthor(@ApiParam(name="id", value ="Author ID", required = true) @PathVariable Long id) throws AuthorNotFoundException{	
 		Optional<Author> author = authorStoreService.getAuthor(id);
 		if(author.isPresent()) {
 			return ResponseEntity.status(HttpStatus.OK).body(author);			

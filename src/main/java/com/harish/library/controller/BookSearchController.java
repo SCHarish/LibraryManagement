@@ -43,9 +43,9 @@ public class BookSearchController {
 
 	@GetMapping(value = "/search/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "searchBooksByAttribute", response = Iterable.class, notes = "Get list of books by any of the attributes")
-	public ResponseEntity<Set<Book>> searchBooksByAttribute(@RequestParam(required = false) String title,
-			@RequestParam(required = false) String tag, @RequestParam(required = false) String isbn,
-			@RequestParam(required = false) Long author_id) throws AuthorNotFoundException {
+	public ResponseEntity<Set<Book>> searchBooksByAttribute(@ApiParam(value = "Book Title")@RequestParam(required = false) String title,
+			@ApiParam(value = "Book Tag")@RequestParam(required = false) String tag, @ApiParam(value = "Book ISBN No.")@RequestParam(required = false) String isbn,
+			@ApiParam(value = "Author Id")@RequestParam(required = false) Long author_id) throws AuthorNotFoundException {
 		Set<Book> bookCollection = new HashSet<Book>();
 
 		if (author_id != null && author_id > 0) {
@@ -63,6 +63,14 @@ public class BookSearchController {
 				bookCollection.addAll(bookSearchService.searchBooksByTitle(title));
 			} catch (NoResultsFoundException ex) {
 				LOGGER.error("No books found with the given title "+title);
+			}
+		}
+		
+		if (isbn != null && !isbn.isBlank() && !isbn.isEmpty()) {
+			try {
+				bookCollection.add(bookSearchService.searchBookByISBN(isbn));
+			} catch (BookNotFoundException ex) {
+				LOGGER.error("No books found with the given ISBN No. "+isbn);
 			}
 		}
 
