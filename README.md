@@ -1,7 +1,7 @@
 ## Library Management Application
 ---
 ### About
-<p>This is a simple library management application built using spring boot. It is used to store books and maintain them in the library. Entities involved here are Book, Author and Tags</p>
+<p>This is a simple library management application built in Java using spring boot. It is used to store and manage books in the library. Entities involved here are Book, Author and Tags</p>
 
 ---
 ### Tools
