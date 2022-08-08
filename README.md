@@ -32,6 +32,8 @@
   <img src="https://user-images.githubusercontent.com/25337840/183427384-5accdd43-2535-4e25-801a-c1aed74519ec.png"/>
   
 * Execute the command <b>java -jar target/LibraryManagementApp-0.0.1-SNAPSHOT.jar</b>
+<img width="1054" alt="image" src="https://user-images.githubusercontent.com/25337840/183438251-b9a4df91-89df-41ab-be5a-4d39488fee28.png">
+
 
 * Now the application is running. All the tables will be automatically created in “librarydb”. By default, it runs in port:8082. You can open up the    swagger ui from  following url: http://localhost:8082/swagger-ui.html
 
