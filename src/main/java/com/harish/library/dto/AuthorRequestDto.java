@@ -11,6 +11,10 @@ public class AuthorRequestDto {
 	@JsonProperty("name")
 	@ApiModelProperty(value = "Author of the book")
 	String name;
+	
+	@JsonProperty("country")
+	@ApiModelProperty(value = "Author country")
+	String country;
 
 	public String getName() {
 		return name;
@@ -18,5 +22,13 @@ public class AuthorRequestDto {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 }

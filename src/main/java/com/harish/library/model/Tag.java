@@ -22,23 +22,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "tags")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "books"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler", "books" })
 public class Tag {
-
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
-//	private Long Id;
-	
 	@Id
 	@Column(name = "name", length = 50, nullable = false)
 	private String name;
 
-	@ElementCollection(targetClass=Book.class)
-//	@ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ElementCollection(targetClass = Book.class)
 	@ManyToMany
-	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE, CascadeType.PERSIST})
-	@JoinColumn(name="boos_isbn")
-	//@JoinTable(name = "book_tags", joinColumns = @JoinColumn(name = "tag_name"), inverseJoinColumns=@JoinColumn(name="book_isbn"))
+	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.MERGE, CascadeType.PERSIST })
+	@JoinColumn(name = "book_isbn")
 	private Set<Book> books = new HashSet<Book>();
 
 	public Tag(String name) {
@@ -52,7 +45,7 @@ public class Tag {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public void setBook(Book book) {
 		this.books.add(book);
 	}
@@ -63,7 +56,6 @@ public class Tag {
 
 	public void setBooks(Set<Book> books) {
 		this.books = books;
-		//books.stream().forEach(book -> book.setTag(this));
 	}
 
 	public Tag() {

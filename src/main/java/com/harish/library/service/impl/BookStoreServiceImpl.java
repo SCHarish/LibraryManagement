@@ -97,7 +97,7 @@ public class BookStoreServiceImpl implements IBookStoreService {
 		if (authorInfo.isPresent()) {
 			List<String> updatedTagList = Arrays.asList(bookDto.getTags());
 			List<Tag> newTagList = BookStoreUtil.constructTags(updatedTagList);
-
+			deleteBook(bookDto.getIsbn());
 			// converting dto to domain object
 			Book updateBook = BookStoreUtil.constructBook(bookDto, authorInfo.get(), newTagList);
 			return bookStoreRepository.save(updateBook);

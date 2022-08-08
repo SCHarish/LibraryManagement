@@ -24,6 +24,9 @@ public class Author {
 
 	@Column(name = "name", length = 100, nullable = false)
 	private String name;
+	
+	@Column(name = "country", length = 100, nullable = true)
+	private String country;
 
 	// An Author can write many books
 	@OneToMany(targetEntity = Book.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -52,6 +55,14 @@ public class Author {
 
 	public void setBooks(Set<Book> books) {
 		this.books = books;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 	public Author(String name) {
