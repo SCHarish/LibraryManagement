@@ -37,7 +37,7 @@
 
 * Now the application is running. All the tables will be automatically created in “librarydb”. By default, it runs in port:8082. You can open up the    swagger ui from  following url: http://localhost:8082/swagger-ui.html
 
-<img width="741" alt="image" src="https://user-images.githubusercontent.com/25337840/183434359-cf17be09-5c16-4d06-83b2-89bca93e9019.png">
+<img width="1332" alt="image" src="https://user-images.githubusercontent.com/25337840/183473830-a9c31d06-569d-4185-9e86-57815a80c799.png">
 
 * You can view the tables by accessing the URL [http://locahost:8082](http://localhost:8080/h2-console/) Use the username as "sa" and password as "password" to connect.
 <img width="814" alt="image" src="https://user-images.githubusercontent.com/25337840/183438806-d35b88e8-a549-43dd-9c78-83cddb5bb2b4.png">
