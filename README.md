@@ -1,7 +1,7 @@
 ## LibraryManagement
 ---
 ### About
-This is a simple library management application built using spring boot. There are three entities Book, Author and Tags.
+* This is a simple library management application built using spring boot. There are three entities Book, Author and Tags.
 ---
 ### Tools
 
