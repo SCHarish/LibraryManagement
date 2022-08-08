@@ -58,6 +58,7 @@ public class BookStoreController {
 	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
 			@ApiResponse(code = 404, message = "Unable to find the Author"),
 			@ApiResponse(code = 409, message = "Duplicate book found"),
+			@ApiResponse(code = 422, message = "Invalid ISBN provided"),
 			@ApiResponse(code = 200, message = "Book added successfully", response = ResponseDto.class) })
 	public ResponseEntity<ResponseDto> addBook(
 			@ApiParam(name = "RequestDto", value = "Book request DTO", required = true) @RequestBody BookRequestDto RequestDto)
@@ -73,6 +74,7 @@ public class BookStoreController {
 	@ApiOperation(value = "getBook", nickname = "getBook")
 	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
 			@ApiResponse(code = 404, message = "Unable to find the book"),
+			@ApiResponse(code = 422, message = "Invalid ISBN provided"),
 			@ApiResponse(code = 200, message = "OK", response = Book.class) })
 	public ResponseEntity<Optional<Book>> getBook(
 			@ApiParam(value = "isbn", required = true, defaultValue = "") @PathVariable String isbn)
@@ -99,6 +101,7 @@ public class BookStoreController {
 	@ApiOperation(value = "updateBook", nickname = "updateBook")
 	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
 			@ApiResponse(code = 404, message = "Unable to find the book"),
+			@ApiResponse(code = 422, message = "Invalid ISBN provided"),
 			@ApiResponse(code = 200, message = "Book updated successfully", response = ResponseDto.class) })
 	public ResponseEntity<ResponseDto> updateBook(
 			@ApiParam(name = "RequestDto", value = "Book request DTO", required = true) @RequestBody BookRequestDto RequestDto)
@@ -114,6 +117,7 @@ public class BookStoreController {
 	@ApiOperation(value = "deleteBook", nickname = "deleteBook")
 	@ApiResponses(value = { @ApiResponse(code = 500, message = "Server error"),
 			@ApiResponse(code = 404, message = "Unable to find the book"),
+			@ApiResponse(code = 422, message = "Invalid ISBN provided"),
 			@ApiResponse(code = 200, message = "Book deleted successfully", response = ResponseDto.class) })
 	public ResponseEntity<ResponseDto> deleteBook(
 			@ApiParam(name = "isbn", value = "Book ISBN No.", required = true) @PathVariable String isbn)
