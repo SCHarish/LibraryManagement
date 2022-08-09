@@ -49,4 +49,6 @@
 ---
 ### Note
 
+* To save time and for easy verification, I've added the output jar(LibraryManagementApp-0.0.1-SNAPSHOT.jar) directly in this repo so that, the application can be directly by executed by the command <b>java -jar LibraryManagementApp-0.0.1-SNAPSHOT.jar</b>
+
 <p>Before adding the Book entity, Author entity needs to be added. Because, Book entity requires an Author entity(author id). Book entity has 1:N relationship with Author.</p>
