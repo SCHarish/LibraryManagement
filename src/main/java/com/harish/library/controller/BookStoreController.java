@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.harish.library.dto.BookRequestDto;
 import com.harish.library.dto.ResponseDto;
 import com.harish.library.dto.BookRequestDto;
+import com.harish.library.exceptions.AuthorNotFoundException;
 import com.harish.library.exceptions.BookNotFoundException;
 import com.harish.library.exceptions.DuplicateBookFoundException;
 import com.harish.library.exceptions.InvalidDataException;
@@ -62,7 +63,7 @@ public class BookStoreController {
 			@ApiResponse(code = 200, message = "Book added successfully", response = ResponseDto.class) })
 	public ResponseEntity<ResponseDto> addBook(
 			@ApiParam(name = "RequestDto", value = "Book request DTO", required = true) @RequestBody BookRequestDto RequestDto)
-			throws DuplicateBookFoundException, InvalidDataException {
+			throws DuplicateBookFoundException, InvalidDataException, AuthorNotFoundException {
 		BookStoreUtil.validateBookRequestDto(RequestDto);
 		Book newBook = bookStoreService.addBook(RequestDto);
 		var responseDto = new ResponseDto.ResponseDtoBuilder("Book added successfully").payload(newBook).build();
