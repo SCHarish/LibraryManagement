@@ -24,8 +24,4 @@ public class TagStoreServiceImpl implements ITagStoreService{
 	public Set<Tag> getTagsByName(String name){
 		return tagRepository.findTagsByName(name);
 	}
-	
-	public List<String> findISBNByTagName(String name){
-		return tagRepository.findISBNByTagName(name);
-	}
 }

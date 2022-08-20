@@ -63,7 +63,7 @@ public class BookSearchServiceImplTest {
 	public void testSearchBooksByAuthorName() throws Exception {
 		// Given
 		Set<Book> books = new HashSet<>();
-		books.add(new Book(isbn, "Harry Potter"));
+		books.add(Book.builder().isbn(isbn).title("Harry Potter").build());
 		var author = mock(Author.class);
 		when(author.getBooks()).thenReturn(books);
 		List<Author> authorList = new ArrayList<>();

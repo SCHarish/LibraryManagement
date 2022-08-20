@@ -25,11 +25,11 @@ public class BookStoreUtil {
 	 * @return
 	 * @throws InvalidDataException
 	 */
-	public static boolean isValidISBN(String isbn) throws InvalidDataException  {
+	public static boolean isValidISBN(String isbn) throws InvalidDataException {
 		if (isbn == null || isbn.isEmpty() || isbn.isBlank()) {
 			throw new InvalidDataException("ISBN value cannot be null");
 		}
-		
+
 		isbn = isbn.replaceAll("-", "");
 		int n = isbn.length();
 		if (n != 13) {
@@ -41,6 +41,7 @@ public class BookStoreUtil {
 
 	/**
 	 * validate book request DTO
+	 * 
 	 * @param requestDto
 	 * @return
 	 * @throws InvalidDataException
@@ -50,10 +51,10 @@ public class BookStoreUtil {
 		if (!isValidISBN(isbn)) {
 			throw new InvalidDataException("Please provide valid ISBN");
 		}
-		
+
 		Set<String> tags = new HashSet<String>();
 		String[] tags_provided = requestDto.getTags();
-		for(String tag : tags_provided) {
+		for (String tag : tags_provided) {
 			tags.add(tag);
 		}
 		String[] new_tags = tags.stream().toArray(String[]::new);
@@ -63,6 +64,7 @@ public class BookStoreUtil {
 
 	/**
 	 * construct Book model object from Book request DTO
+	 * 
 	 * @param requestDto
 	 * @param author
 	 * @param tagList
@@ -74,21 +76,21 @@ public class BookStoreUtil {
 			tagSet.add(tag);
 		}
 
-		var book = new Book.BookBuilder(requestDto.getIsbn(), requestDto.getTitle()).Author(author).Tags(tagSet)
+		var book = Book.builder().author(author).isbn(requestDto.getIsbn()).tags(tagSet).title(requestDto.getTitle())
 				.build();
 		return book;
 	}
 
 	/**
 	 * Construct tag model objects from strings
+	 * 
 	 * @param tags
 	 * @return
 	 */
 	public static List<Tag> constructTags(List<String> tags) {
 		List<Tag> newtagList = new ArrayList();
 		for (String tag : tags) {
-			var newTag = new Tag();
-			newTag.setName(tag);
+			var newTag = Tag.builder().name(tag).build();
 			newtagList.add(newTag);
 		}
 		return newtagList;

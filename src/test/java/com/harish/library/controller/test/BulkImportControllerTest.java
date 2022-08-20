@@ -46,7 +46,7 @@ public class BulkImportControllerTest {
 		MockMultipartFile file = new MockMultipartFile("csvfile", "sample.csv", MediaType.TEXT_PLAIN_VALUE,
 				"Library, Management".getBytes());
 		List<Book> bookList = new ArrayList();
-		bookList.add(new Book("121-3-66-248511-3", "Harry Potter"));
+		bookList.add(Book.builder().isbn("121-3-66-248511-3").title("Harry Potter").build());
 		when(bulkDataImportService.importBooksFromFile(file)).thenReturn(bookList);
 		
 		mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/upload/books").file(file)

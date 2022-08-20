@@ -10,9 +10,10 @@ import com.harish.library.model.Book;
 
 @Repository
 public interface BookStoreRepository extends CrudRepository<Book, String> {
-
-//	@Query("SELECT b FROM Book b WHERE b.title LIKE %?1%" + " OR b.isbn LIKE %?1%")
-//	public Set<Book> searchBooks(String keyword);
-	
+	/**
+	 * 
+	 * @param title
+	 * @return
+	 */
 	public Set<Book> findByTitle(String title);
 }

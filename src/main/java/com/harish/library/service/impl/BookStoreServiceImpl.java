@@ -26,7 +26,9 @@ import com.harish.library.exceptions.DuplicateBookFoundException;
 import com.harish.library.exceptions.NoResultsFoundException;
 import com.harish.library.model.Author;
 import com.harish.library.model.Book;
+import com.harish.library.model.BookCopy;
 import com.harish.library.repository.AuthorRepository;
+import com.harish.library.repository.BookCopyRepository;
 //import com.harish.library.model.BookTags;
 import com.harish.library.repository.BookStoreRepository;
 //import com.harish.library.repository.BookTagRepository;
@@ -47,11 +49,13 @@ public class BookStoreServiceImpl implements IBookStoreService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BookStoreServiceImpl.class);
 	private final BookStoreRepository bookStoreRepository;
 	private final IAuthorStoreService authorStoreService;
+	private final BookCopyRepository bookCopyRepository;
 
 	@Autowired
-	public BookStoreServiceImpl(BookStoreRepository bookRepository, IAuthorStoreService authorStoreService) {
+	public BookStoreServiceImpl(BookStoreRepository bookRepository, BookCopyRepository bookCopyRepository, IAuthorStoreService authorStoreService) {
 		this.authorStoreService = authorStoreService;
 		this.bookStoreRepository = bookRepository;
+		this.bookCopyRepository = bookCopyRepository;
 	}
 
 	@Override
@@ -91,7 +95,14 @@ public class BookStoreServiceImpl implements IBookStoreService {
 
 			// converting dto to domain object
 			Book newBook = BookStoreUtil.constructBook(bookDto, authorInfo.get(), newTagList);
-			return bookStoreRepository.save(newBook);
+			
+			
+			Book addedBook = bookStoreRepository.save(newBook);
+			
+			BookCopy newBookCopy = BookCopy.builder().book(addedBook).build();
+			bookCopyRepository.save(newBookCopy);
+			
+			return addedBook;
 		} else {
 			throw new AuthorNotFoundException("No author found with the given author id : " + bookDto.getAuthorId());
 		}

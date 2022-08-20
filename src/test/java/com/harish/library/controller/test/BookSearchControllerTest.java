@@ -59,7 +59,7 @@ public class BookSearchControllerTest {
 		String title = "Harry Potter";
 		String url = "/api/v1/title/" + title + "/books";
 		Set<Book> books = new HashSet<>();
-		books.add(new Book(isbn, "Harry Potter"));
+		books.add(Book.builder().isbn(isbn).title("Harry Potter").build());
 		when(bookStoreService.findByTitle("Harry Potter")).thenReturn(books);
 		when(bookSearchService.searchBooksByTitle(title)).thenReturn(books);
 
@@ -72,9 +72,9 @@ public class BookSearchControllerTest {
 		// Given
 		String url = "/api/v1/search/books?tag=harish&author_id=123";
 		Set<Book> books = new HashSet<>();
-		books.add(new Book(isbn, "Harry Potter"));
+		books.add(Book.builder().isbn(isbn).title("Harry Potter").build());
 		Set<Book> book_list2 = new HashSet<>();
-		book_list2.add(new Book("999-3-55-248511-1", "Harish's Biography"));
+		book_list2.add(Book.builder().isbn("999-3-55-248511-1").title("Harish's Biography").build()); 
 		when(bookSearchService.searchBooksByTag("harish")).thenReturn(book_list2);
 		when(bookSearchService.searchBooksByAuthorId(123L)).thenReturn(books);
 
@@ -87,9 +87,9 @@ public class BookSearchControllerTest {
 		// Given
 		String url = "/api/v1/search/books?title=harry%20potter&tag=fiction";
 		Set<Book> books = new HashSet<>();
-		books.add(new Book(isbn, "Harry Potter"));
+		books.add(Book.builder().isbn(isbn).title("Harry Potter").build());
 		Set<Book> book_list2 = new HashSet<>();
-		book_list2.add(new Book("999-3-55-248511-1", "Harish's Biography"));
+		book_list2.add(Book.builder().isbn("999-3-55-248511-1").title("Harish's Biography").build());
 		when(bookSearchService.searchBooksByTitle("harry potter")).thenReturn(book_list2);
 		when(bookSearchService.searchBooksByTag("fiction")).thenReturn(books);
 
@@ -102,7 +102,7 @@ public class BookSearchControllerTest {
 		// Given
 		String url = "/api/v1/search/books?tag=fiction";
 		Set<Book> books = new HashSet<>();
-		books.add(new Book(isbn, "Harry Potter"));
+		books.add(Book.builder().isbn(isbn).title("Harry Potter").build());
 		when(bookSearchService.searchBooksByTag("fiction")).thenReturn(books);
 
 		// Act and Assert
@@ -119,7 +119,7 @@ public class BookSearchControllerTest {
 		// Given
 		String url = "/api/v1/search/books?title=Believer&tag=Life";
 		Set<Book> books = new HashSet<>();
-		books.add(new Book(isbn, "Harry Potter"));
+		books.add(Book.builder().isbn(isbn).title("Harry Potter").build());
 		when(bookSearchService.searchBooksByTitle("Believer")).thenReturn(books);
 		when(bookSearchService.searchBooksByTag("Life")).thenReturn(books);
 
@@ -136,10 +136,10 @@ public class BookSearchControllerTest {
 		// Given
 		String url = "/api/v1/search/books?author_id=123&isbn=777-3-55-248511-2";
 		Set<Book> books = new HashSet<>();
-		books.add(new Book(isbn, "Harry Potter"));
+		books.add(Book.builder().isbn(isbn).title("Harry Potter").build());
 		when(bookSearchService.searchBooksByAuthorId(123L)).thenReturn(books);
 		when(bookSearchService.searchBookByISBN("777-3-55-248511-2"))
-				.thenReturn(new Book("777-3-55-248511-2", "Harish's Biography"));
+				.thenReturn(Book.builder().isbn("777-3-55-248511-2").title("Harish's Biography").build());
 
 		// Act and Assert
 		mockMvc.perform(MockMvcRequestBuilders.get(url)).andExpect(status().isOk());

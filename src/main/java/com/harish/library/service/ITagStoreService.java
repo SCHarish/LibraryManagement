@@ -17,10 +17,4 @@ public interface ITagStoreService {
 	 * @return
 	 */
 	Set<Tag> getTagsByName(String name);
-	/**
-	 * 
-	 * @param name
-	 * @return
-	 */
-	List<String> findISBNByTagName(String name);
 }

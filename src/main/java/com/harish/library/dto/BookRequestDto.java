@@ -1,6 +1,7 @@
 
 package com.harish.library.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,22 +16,22 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel
 public class BookRequestDto {
-	@NotNull
+	@NotNull(message = "ISBN value cannot be null")
 	@JsonProperty("isbn")
 	@ApiModelProperty(value = "ISBN no.", example = "333-2-99-248231-7", required = true)
 	String isbn;
 
-	@NotNull
+	@NotNull(message = "Book title cannot be null")
 	@JsonProperty("title")
-	@ApiModelProperty(value = "Book title", example = "Harry Potter", required = false )
+	@ApiModelProperty(value = "Book title", example = "Harry Potter", required = true )
 	String title;
 
-	@NotNull
+	@NotNull(message = "Author id cannot be null")
 	@JsonProperty("authorId")
 	@ApiModelProperty(value = "Author id", dataType="Long", example = "123", required = true)
 	Long authorId;
 
-	@NotNull
+	@NotNull(message = "Please add atleast one tag")
 	@JsonProperty("tags")
 	@ApiModelProperty(value = "Tags", dataType = "[Ljava.lang.String;", required = true)
 	String[] tags;

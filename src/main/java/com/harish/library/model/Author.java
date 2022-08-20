@@ -34,9 +34,8 @@ public class Author {
 	private String country;
 
 	// An Author can write many books
-	@OneToMany(targetEntity = Book.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "author_id")
-	private Set<Book> books;
+	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Book> books; //Inverse side
 
 	public Long getId() {
 		return id;
