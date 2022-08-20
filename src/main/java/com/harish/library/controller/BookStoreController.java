@@ -3,6 +3,8 @@ package com.harish.library.controller;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -62,7 +64,7 @@ public class BookStoreController {
 			@ApiResponse(code = 422, message = "Invalid ISBN provided"),
 			@ApiResponse(code = 200, message = "Book added successfully", response = ResponseDto.class) })
 	public ResponseEntity<ResponseDto> addBook(
-			@ApiParam(name = "RequestDto", value = "Book request DTO", required = true) @RequestBody BookRequestDto RequestDto)
+			@ApiParam(name = "RequestDto", value = "Book request DTO", required = true) @Valid @RequestBody BookRequestDto RequestDto)
 			throws DuplicateBookFoundException, InvalidDataException, AuthorNotFoundException {
 		BookStoreUtil.validateBookRequestDto(RequestDto);
 		Book newBook = bookStoreService.addBook(RequestDto);

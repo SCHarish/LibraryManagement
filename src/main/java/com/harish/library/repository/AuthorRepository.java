@@ -13,5 +13,10 @@ import com.harish.library.model.Tag;
  *
  */
 public interface AuthorRepository extends JpaRepository<Author, Long> {
+	/**
+	 * 
+	 * @param author_name
+	 * @return
+	 */
 	public List<Author> findAuthorsByName(String author_name);
 }

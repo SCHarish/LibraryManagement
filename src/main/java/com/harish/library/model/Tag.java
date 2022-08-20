@@ -12,6 +12,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 /**
  * 
  * @author harishsc
@@ -20,47 +27,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "tags")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler", "books" })
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Tag {
 	@Id
 	@Column(name = "name", length = 50, nullable = false)
 	private String name;
 
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "tags")
-	private Set<Book> books = new HashSet<Book>();
-
-	public Tag(String name) {
-		this.name = name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setBook(Book book) {
-		this.books.add(book);
-	}
-
-	public Set<Book> getBooks() {
-		return books;
-	}
-
-	public void setBooks(Set<Book> books) {
-		this.books = books;
-		books.stream().forEach(book -> book.setTag(this));
-	}
-
-	public Tag() {
-		super();
-	}
-
-	public Tag(Long id, String name, Set<Book> books) {
-		super();
-		this.name = name;
-		this.books = books;
-	}
-
+	private Set<Book> books = new HashSet<Book>(0);
 }
